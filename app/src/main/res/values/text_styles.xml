@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- White Backgrounds (default) -->
+
+    <style name="bodyText">
+        <item name="android:fontFamily">Open Sans</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:lineHeight">22sp</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="displayText">
+        <item name="android:fontFamily">Open Sans</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:lineHeight">40sp</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="captionText">
+        <item name="android:fontFamily">Open Sans</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:lineHeight">16sp</item>
+        <item name="android:fontWeight">300</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="warningHeadingText">
+        <item name="android:fontFamily">Open Sans</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:lineHeight">22sp</item>
+        <item name="android:fontWeight">600</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="warningBodyText">
+        <item name="android:fontFamily">Open Sans</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineHeight">18sp</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+
+    <!-- Dark BackGrounds -->
+
+    <style name="bodyTextDB">
+        <item name="android:fontFamily">Open Sans</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:lineHeight">22sp</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="displayTextDB">
+        <item name="android:fontFamily">Open Sans</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:lineHeight">40sp</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="captionTextDB">
+        <item name="android:fontFamily">Open Sans</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:lineHeight">16sp</item>
+        <item name="android:fontWeight">300</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="warningHeadingTextDB">
+        <item name="android:fontFamily">Open Sans</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:lineHeight">22sp</item>
+        <item name="android:fontWeight">600</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="warningBodyTextDB">
+        <item name="android:fontFamily">Open Sans</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineHeight">18sp</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+
+</resources>
