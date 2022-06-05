@@ -29,6 +29,7 @@
         android:id="@+id/textView_createdOn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:inputType="date"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="@+id/imageView_createdIcon"
         app:layout_constraintStart_toEndOf="@+id/imageView_createdIcon"
@@ -39,6 +40,7 @@
         android:id="@+id/textView_updatedOn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:inputType="date"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="@+id/imageView_updatedIcon"
         app:layout_constraintStart_toEndOf="@+id/imageView_updatedIcon"
@@ -50,6 +52,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="60dp"
+        android:inputType="textLongMessage|textMultiLine|text"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/imageButton_closeNote"
@@ -84,4 +87,5 @@
         app:layout_constraintTop_toTopOf="@+id/textView_title"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
         tools:ignore="SpeakableTextPresentCheck" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
