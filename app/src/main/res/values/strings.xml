@@ -14,4 +14,18 @@
 
     <!-- Potentially Needed Strings -->
 
+    <!-- Login/Register Pages -->
+    
+    <string name="loginPage_welcomeMessage">Welcome!</string>
+    <string name="loginPage_emailHint">Email or username</string>
+    <string name="loginPage_passwordHint">Password</string>
+    <string name="loginPage_goToAccount">Go to your notes</string>
+    <string name="loginPage_createAccount">Don\'t have an account? Register</string>
+
+    <string name="registerPage_message">Create an Account</string>
+    <string name="registerPage_email">Enter email</string>
+    <string name="registerPage_password">Enter password</string>
+    <string name="registerPage_confirmPassword">Confirm Password</string>
+
+
 </resources>
