@@ -15,7 +15,7 @@
     <!-- Potentially Needed Strings -->
 
     <!-- Login/Register Pages -->
-    
+
     <string name="loginPage_welcomeMessage">Welcome!</string>
     <string name="loginPage_emailHint">Email or username</string>
     <string name="loginPage_passwordHint">Password</string>
