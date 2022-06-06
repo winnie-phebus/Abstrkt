@@ -8,18 +8,19 @@
 
     <ImageView
         android:id="@+id/imageView_searchIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="25dp"
         app:layout_constraintBottom_toBottomOf="@+id/editText_Search"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/editText_Search"
-        app:srcCompat="@android:drawable/ic_menu_search" />
+        app:srcCompat="@drawable/Search" />
 
     <EditText
         android:id="@+id/editText_Search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="Search"
@@ -79,5 +80,6 @@
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@android:drawable/ic_input_add"
+        tools:ignore="SpeakableTextPresentCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>
