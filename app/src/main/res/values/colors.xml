@@ -5,9 +5,19 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="white">#FFFFFFFF</color>
+
 
     <!-- Custom Colors -->
+
+    <!-- Standard black, white and gray,
+    gray1 for disabling buttons, gray2 for bounding boxes -->
+
+    <color name="white">#FFFFFFFF</color>
     <color name="black">#FF262626</color>
+    <color name="gray1">#BDBDBD</color>
+    <color name="gray2">#F8F8F8</color>
+
+    <color name="green_main">#36B268</color>
+    <color name="green_light">#EBF7F0</color>
 
 </resources>
