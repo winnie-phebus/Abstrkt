@@ -8,9 +8,12 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class Note extends AppCompatActivity {
 
     private TextView title, noteAbstract, createdOn, lastUpdated, noteBody;
+    private List<String> tags;
     private ImageButton close;
 
     private Note note;
@@ -43,5 +46,13 @@ public class Note extends AppCompatActivity {
                 startActivity(toHome);
             }
         });
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 }

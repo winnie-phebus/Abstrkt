@@ -35,7 +35,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/org_search_input"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/org_search_input"
-        app:srcCompat="@drawable/Search" />
+        app:srcCompat="@mipmap/search" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/org_fragment_cont"

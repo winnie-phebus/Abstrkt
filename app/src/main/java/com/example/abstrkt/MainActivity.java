@@ -25,13 +25,33 @@ import java.util.List;
  * References:
  * https://firebase.google.com/docs/auth/android/firebaseui?hl=be#java
  * https://developers.google.com/identity/smartlock-passwords/android/
- *
  */
 public class MainActivity extends AppCompatActivity {
 
+    // See: https://developer.android.com/training/basics/intents/result
+    private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
+            new FirebaseAuthUIActivityResultContract(),
+            new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
+                @Override
+                public void onActivityResult(FirebaseAuthUIAuthenticationResult result) {
+                    onSignInResult(result);
+                }
+            }
+    );
     private TextView appName, pageMessage;
     private View fragmentContainer;
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        checkAuth();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        checkAuth();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +62,24 @@ public class MainActivity extends AppCompatActivity {
         pageMessage = findViewById(R.id.lr_screen_title_TV);
         fragmentContainer = findViewById(R.id.lr_login_register_container);
 
-        getSupportFragmentManager().beginTransaction()
-                .addToBackStack("Login")
-                .replace(R.id.lr_login_register_container, new LoginFragment())
-                .commit();
-
         pageMessage.setText("Welcome Back!");
 
+        checkAuth();
+        // TODO: use the FireBaseUI methods for delete / logOut
+    }
+
+    private void checkAuth() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            openAuth();
+        } else {
+            user.reload();
+            Intent openUserHome = new Intent(MainActivity.this, HomePage.class);
+            startActivity(openUserHome);
+        }
+    }
+
+    private void openAuth() {
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build());
@@ -60,10 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 .setIsSmartLockEnabled(false, true) // TODO: delete if adding Google Auth
                 .build().setFlags(FLAG_IMMUTABLE);
         signInLauncher.launch(signInIntent);
-
-        // TODO: use the FireBaseUI methods for delete / logOut
     }
-
 
     public void returnLogin() {
         getSupportFragmentManager().beginTransaction()
@@ -80,19 +108,6 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
         pageMessage.setText("Register Here!");
     }
-
-
-
-    // See: https://developer.android.com/training/basics/intents/result
-    private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
-            new FirebaseAuthUIActivityResultContract(),
-            new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
-                @Override
-                public void onActivityResult(FirebaseAuthUIAuthenticationResult result) {
-                    onSignInResult(result);
-                }
-            }
-    );
 
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         IdpResponse response = result.getIdpResponse();
