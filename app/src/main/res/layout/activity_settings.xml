@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/settings_darkMode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
@@ -26,31 +26,31 @@
         app:layout_constraintTop_toBottomOf="@+id/arc_title2" />
 
     <Switch
-        android:id="@+id/switch2"
+        android:id="@+id/settings_notifications"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="Notifications"
         app:layout_constraintStart_toStartOf="@+id/arc_title2"
-        app:layout_constraintTop_toBottomOf="@+id/switch1" />
+        app:layout_constraintTop_toBottomOf="@+id/settings_darkMode" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/settings_logOut"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:text="Log Out"
-        app:layout_constraintEnd_toEndOf="@+id/button2"
-        app:layout_constraintStart_toStartOf="@+id/button2"
-        app:layout_constraintTop_toBottomOf="@+id/switch2" />
+        app:layout_constraintEnd_toEndOf="@+id/settings_deleteAccount"
+        app:layout_constraintStart_toStartOf="@+id/settings_deleteAccount"
+        app:layout_constraintTop_toBottomOf="@+id/settings_notifications" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/settings_deleteAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="Delete Account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/settings_logOut" />
 </androidx.constraintlayout.widget.ConstraintLayout>

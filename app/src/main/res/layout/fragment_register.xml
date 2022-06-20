@@ -13,11 +13,11 @@
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/lr_register_button"
+            android:id="@+id/lr_register_go"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Button"
+            android:text="Register"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,6 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:ems="10"
+            android:hint="@string/registerPage_email"
             android:inputType="textEmailAddress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -41,6 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:ems="10"
+            android:hint="@string/loginPage_passwordHint"
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -61,6 +63,16 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lr_register_password" />
+
+        <Button
+            android:id="@+id/lr_register_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Back to Login"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lr_register_go" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

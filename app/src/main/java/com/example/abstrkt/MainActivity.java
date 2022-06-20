@@ -2,12 +2,14 @@ package com.example.abstrkt;
 
 import static android.app.PendingIntent.FLAG_IMMUTABLE;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
+
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
-import android.os.Bundle;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
@@ -27,10 +29,25 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity {
 
+    private TextView appName, pageMessage;
+    private View fragmentContainer;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        appName = findViewById(R.id.lr_abstrakt_TV);
+        pageMessage = findViewById(R.id.lr_screen_title_TV);
+        fragmentContainer = findViewById(R.id.lr_login_register_container);
+
+        getSupportFragmentManager().beginTransaction()
+                .addToBackStack("Login")
+                .replace(R.id.lr_login_register_container, new LoginFragment())
+                .commit();
+
+        pageMessage.setText("Welcome Back!");
 
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
@@ -46,6 +63,25 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO: use the FireBaseUI methods for delete / logOut
     }
+
+
+    public void returnLogin() {
+        getSupportFragmentManager().beginTransaction()
+                .addToBackStack("Register")
+                .replace(R.id.lr_login_register_container, new LoginFragment())
+                .commit();
+        pageMessage.setText("Welcome Back!");
+    }
+
+    public void returnRegister() {
+        getSupportFragmentManager().beginTransaction()
+                .addToBackStack("Register")
+                .replace(R.id.lr_login_register_container, new RegisterFragment())
+                .commit();
+        pageMessage.setText("Register Here!");
+    }
+
+
 
     // See: https://developer.android.com/training/basics/intents/result
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
