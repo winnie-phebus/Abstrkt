@@ -14,6 +14,8 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <!--- TODO: customize our personal theme to match this standard: https://github.com/firebase/FirebaseUI-Android/blob/master/docs/upgrade-to-8.0.md in the auth transition to material components section-->
+    <!-- https://m3.material.io/ for material Design ref -->
     <style name="Theme.Abstrkt.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

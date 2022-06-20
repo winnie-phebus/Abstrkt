@@ -28,7 +28,7 @@
             android:name=".TagsActivity"
             android:exported="false" />
         <activity
-            android:name=".Note"
+            android:name=".NoteActivity"
             android:exported="false" />
         <activity
             android:name=".Register"

@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
                 .setIsSmartLockEnabled(false, true) // TODO: delete if adding Google Auth
+               // .setTheme(R.style.AppTheme)  TODO: if doing custom theme
                 .build().setFlags(FLAG_IMMUTABLE);
         signInLauncher.launch(signInIntent);
     }

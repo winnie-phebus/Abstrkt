@@ -1,51 +1,66 @@
 package com.example.abstrkt;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
-
 import java.util.List;
 
-public class Note extends AppCompatActivity {
-
-    private TextView title, noteAbstract, createdOn, lastUpdated, noteBody;
+public class Note {
+    private String title;
+    private String noteAbstract;
+    private String body;
+    private String createdOn;
+    private String updatedOn;
     private List<String> tags;
-    private ImageButton close;
 
-    private Note note;
+    // for Firebase
+    public Note() {
+    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_note);
+    public Note(String title, String noteAbstract, String body, String createdOn, String updatedOn, List<String> tags) {
+        this.title = title;
+        this.noteAbstract = noteAbstract;
+        this.body = body;
+        this.createdOn = createdOn;
+        this.updatedOn = updatedOn;
+        this.tags = tags;
+    }
 
-        title = findViewById(R.id.textView_title);
-        noteAbstract = findViewById(R.id.textView_abstract);
-        createdOn = findViewById(R.id.textView_createdOn);
-        lastUpdated = findViewById(R.id.textView_updatedOn);
-        noteBody = findViewById(R.id.textView_note);
-        close = findViewById(R.id.imageButton_closeNote);
+    public String getTitle() {
+        return title;
+    }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-        //TODO create a note class and have it hold these
-//        title.setText(note.getTitle());
-//        noteAbstract.setText(note.getAbstract());
-//        createdOn.setText(note.getCreatedOnString());
-//        lastUpdated.setText(note.getUpdatedOnString());
-//        noteBody.setText(note.getNote());
+    public String getAbstract() {
+        return noteAbstract;
+    }
 
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO before sending back home, save changes
-                Intent toHome = new Intent(Note.this, HomePage.class);
-                startActivity(toHome);
-            }
-        });
+    public void setAbstract(String noteAbstract) {
+        this.noteAbstract = noteAbstract;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public String getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(String createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public String getUpdatedOn() {
+        return updatedOn;
+    }
+
+    public void setUpdatedOn(String updatedOn) {
+        this.updatedOn = updatedOn;
     }
 
     public List<String> getTags() {
