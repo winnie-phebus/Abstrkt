@@ -3,7 +3,7 @@
 
     <!-- White Backgrounds (default) -->
 
-    <style name="bodyText">
+    <style name="Theme.bodyText" parent="android:Theme">
         <item name="android:fontFamily">Open Sans</item>
         <item name="android:textSize">16sp</item>
         <item name="android:lineHeight">22sp</item>
@@ -11,7 +11,7 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="displayText">
+    <style name="displayText" parent="android:Theme">
         <item name="android:fontFamily">Open Sans</item>
         <item name="android:textSize">30sp</item>
         <item name="android:lineHeight">40sp</item>
@@ -19,7 +19,7 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="captionText">
+    <style name="captionText" parent="android:Theme">
         <item name="android:fontFamily">Open Sans</item>
         <item name="android:textSize">12sp</item>
         <item name="android:lineHeight">16sp</item>
@@ -27,7 +27,7 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="warningHeadingText">
+    <style name="warningHeadingText" parent="android:Theme">
         <item name="android:fontFamily">Open Sans</item>
         <item name="android:textSize">16sp</item>
         <item name="android:lineHeight">22sp</item>
@@ -35,7 +35,7 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="warningBodyText">
+    <style name="warningBodyText" parent="android:Theme">
         <item name="android:fontFamily">Open Sans</item>
         <item name="android:textSize">14sp</item>
         <item name="android:lineHeight">18sp</item>
@@ -46,7 +46,7 @@
 
     <!-- Dark BackGrounds -->
 
-    <style name="bodyTextDB">
+    <style name="bodyTextDB" parent="android:Theme">
         <item name="android:fontFamily">Open Sans</item>
         <item name="android:textSize">16sp</item>
         <item name="android:lineHeight">22sp</item>
@@ -54,7 +54,7 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="displayTextDB">
+    <style name="displayTextDB" parent="android:Theme">
         <item name="android:fontFamily">Open Sans</item>
         <item name="android:textSize">30sp</item>
         <item name="android:lineHeight">40sp</item>
@@ -62,7 +62,7 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="captionTextDB">
+    <style name="captionTextDB" parent="android:Theme">
         <item name="android:fontFamily">Open Sans</item>
         <item name="android:textSize">12sp</item>
         <item name="android:lineHeight">16sp</item>
@@ -70,7 +70,7 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="warningHeadingTextDB">
+    <style name="warningHeadingTextDB" parent="android:Theme">
         <item name="android:fontFamily">Open Sans</item>
         <item name="android:textSize">16sp</item>
         <item name="android:lineHeight">22sp</item>
@@ -78,7 +78,7 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="warningBodyTextDB">
+    <style name="warningBodyTextDB" parent="android:Theme">
         <item name="android:fontFamily">Open Sans</item>
         <item name="android:textSize">14sp</item>
         <item name="android:lineHeight">18sp</item>
