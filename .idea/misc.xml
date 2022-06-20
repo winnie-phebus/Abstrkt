@@ -4,12 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/doron/AndroidStudioProjects/Abstrkt/app/src/main/res/layout/activity_home_page.xml" value="0.22" />
-        <entry key="..\:/Users/doron/AndroidStudioProjects/Abstrkt/app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="..\:/Users/doron/AndroidStudioProjects/Abstrkt/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/doron/AndroidStudioProjects/Abstrkt/app/src/main/res/layout/activity_note.xml" value="0.25" />
         <entry key="..\:/Users/doron/AndroidStudioProjects/Abstrkt/app/src/main/res/layout/activity_register.xml" value="0.1" />
         <entry key="..\:/Users/doron/AndroidStudioProjects/Abstrkt/app/src/main/res/layout/fragment_login.xml" value="0.1734375" />
         <entry key="..\:/Users/doron/AndroidStudioProjects/Abstrkt/app/src/main/res/layout/fragment_register.xml" value="0.1734375" />
+        <entry key="app/src/main/res/drawable/pill_bg.xml" value="0.1555" />
         <entry key="app/src/main/res/layout/activity_hidden.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/activity_home_page.xml" value="0.2088977389865451" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.23676147460937502" />

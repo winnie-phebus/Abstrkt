@@ -17,6 +17,9 @@
     <color name="gray1">#BDBDBD</color>
     <color name="gray2">#F8F8F8</color>
 
+    <color name="primary_color">#36B268</color>
+    <color name="secondary_color">#EBF7F0</color>
+
     <color name="green_main">#36B268</color>
     <color name="green_light">#EBF7F0</color>
 
