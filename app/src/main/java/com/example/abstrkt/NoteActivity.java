@@ -2,11 +2,17 @@ package com.example.abstrkt;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Date;
 import java.util.List;
@@ -56,6 +62,7 @@ public class NoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO before sending back home, save changes
+                updateNoteFB();
                 Intent toHome = new Intent(NoteActivity.this, HomePage.class);
                 startActivity(toHome);
             }
@@ -76,7 +83,21 @@ public class NoteActivity extends AppCompatActivity {
         this.tags = tags;
     }
 
-    public void updateNoteFB(){
+    private void noteUpdate(){
+        note.updateNote();
+    }
 
+    public void updateNoteFB(){
+        noteUpdate();
+        Log.d("NOTE ACTIVITY", note.getId());
+        FirebaseFirestore.getInstance()
+                .document(note.getId())
+                .set(note)
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(NoteActivity.this, "saving note failed!", Toast.LENGTH_SHORT);
+                    }
+                });
     }
 }
