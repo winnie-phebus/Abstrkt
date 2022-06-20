@@ -8,7 +8,7 @@
     tools:context=".FolderHolder">
 
     <ImageView
-        android:id="@+id/fodler_prev_icon"
+        android:id="@+id/folder_prev_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/folder_closed_black"
@@ -16,11 +16,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/fodler_prev_name"
+        android:id="@+id/folder_prev_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Example"
-        app:layout_constraintEnd_toEndOf="@+id/fodler_prev_icon"
-        app:layout_constraintStart_toStartOf="@+id/fodler_prev_icon"
-        app:layout_constraintTop_toBottomOf="@+id/fodler_prev_icon" />
+        app:layout_constraintEnd_toEndOf="@+id/folder_prev_icon"
+        app:layout_constraintStart_toStartOf="@+id/folder_prev_icon"
+        app:layout_constraintTop_toBottomOf="@+id/folder_prev_icon" />
 </androidx.constraintlayout.widget.ConstraintLayout>
