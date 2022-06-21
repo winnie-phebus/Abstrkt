@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -19,9 +20,12 @@ import java.util.List;
 
 public class NoteActivity extends AppCompatActivity {
 
-    private TextView title, noteAbstract, createdOn, lastUpdated, noteBody;
-    private List<String> tags;
+    private TextView title, noteAbstract, noteBody;
+    private TextView lastUpdated, createdOn;
     private ImageButton close;
+    private RecyclerView editTags;
+
+    private List<String> tags;
     private Note note;
 
     // private Note note;
@@ -45,11 +49,14 @@ public class NoteActivity extends AppCompatActivity {
             note = getIntent().getParcelableExtra(HomePage.NOTE);
         }
 
-        title = findViewById(R.id.textView_title);
-        noteAbstract = findViewById(R.id.textView_abstract);
+        // editable content
+        title = findViewById(R.id.editText_title);
+        noteAbstract = findViewById(R.id.editText_abstract);
+        noteBody = findViewById(R.id.editText_note);
+        editTags = findViewById(R.id.note_editTags);
+
         createdOn = findViewById(R.id.textView_createdOn);
         lastUpdated = findViewById(R.id.textView_updatedOn);
-        noteBody = findViewById(R.id.textView_note);
         close = findViewById(R.id.imageButton_closeNote);
 
         title.setText(note.getTitle());
