@@ -9,4 +9,6 @@ public class Utils {
     public static final String FSN_CREATED = "createdOn";
     public static final String FSN_UPDATED = "updatedOn";
     public static final String FSN_TAGS = "tags";
+    public static final String FSN_OWNER = "owner";
+    public static final String FSN_ID = "id";
 }
