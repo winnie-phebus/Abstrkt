@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class NoteActivity extends AppCompatActivity {
 
-    private TextView title, noteAbstract, noteBody;
+    private EditText title, noteAbstract, noteBody;
     private TextView lastUpdated, createdOn;
     private ImageButton close;
     private RecyclerView editTags;
@@ -91,6 +92,9 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     private void noteUpdate(){
+        note.setTitle(title.getText().toString());
+        note.setAbstract(noteAbstract.getText().toString());
+        note.setBody(noteBody.getText().toString());
         note.updateNote();
     }
 

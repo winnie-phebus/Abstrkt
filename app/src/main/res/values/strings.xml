@@ -13,9 +13,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Potentially Needed Strings -->
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
 
     <!-- Login/Register Pages -->
-
     <string name="loginPage_welcomeMessage">Welcome!</string>
     <string name="loginPage_emailHint">Email or username</string>
     <string name="loginPage_passwordHint">Password</string>
