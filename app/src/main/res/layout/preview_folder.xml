@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/folder_outsideContainer"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    tools:context=".FolderHolder">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/folder_prev_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
         android:src="@drawable/folder_closed_black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -20,8 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Example"
-        android:background="@style/Theme.bodyText"
         app:layout_constraintEnd_toEndOf="@+id/folder_prev_icon"
         app:layout_constraintStart_toStartOf="@+id/folder_prev_icon"
         app:layout_constraintTop_toBottomOf="@+id/folder_prev_icon" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

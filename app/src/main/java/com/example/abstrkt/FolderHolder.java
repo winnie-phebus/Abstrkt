@@ -2,8 +2,10 @@ package com.example.abstrkt;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,36 +13,45 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FolderHolder#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class FolderHolder extends Fragment {
+public class FolderHolder extends RecyclerView.ViewHolder {
 
-    ImageView folderIcon;
-    TextView folderName;
-    ConstraintLayout layout;
+    private ImageView folderIcon;
+    private TextView folderName;
+    private ConstraintLayout layout;
 
-    public FolderHolder() {
-        // Required empty public constructor
+    public FolderHolder(@NonNull View itemView) {
+        super(itemView);
+
+        this.folderIcon = itemView.findViewById(R.id.folder_prev_icon);
+        this.folderName = itemView.findViewById(R.id.folder_prev_name);
+        this.layout = itemView.findViewById(R.id.folder_outsideContainer);
     }
 
-
-    public static FolderHolder newInstance(String param1, String param2) {
-        FolderHolder fragment = new FolderHolder();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+    public ImageView getFolderIcon() {
+        return folderIcon;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {}
+    public void setFolderIcon(ImageView folderIcon) {
+        this.folderIcon = folderIcon;
     }
 
-    @Override
+    public TextView getFolderName() {
+        return folderName;
+    }
+
+    public void setFolderName(TextView folderName) {
+        this.folderName = folderName;
+    }
+
+    public ConstraintLayout getLayout() {
+        return layout;
+    }
+
+    public void setLayout(ConstraintLayout layout) {
+        this.layout = layout;
+    }
+
+    // might be referencing later
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -54,13 +65,9 @@ public class FolderHolder extends Fragment {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO on click open a recylcer view below with all notes in that folder
-                // change state of foler to open -> change icon to folder_open ressource file
-                // click to close
+
             }
         });
-
-
 
         return rootView;
     }

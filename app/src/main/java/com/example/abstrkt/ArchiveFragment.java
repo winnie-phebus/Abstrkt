@@ -22,15 +22,7 @@ public class ArchiveFragment extends Fragment {
     public ArchiveFragment() {
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ArchiveFragment.
-     */
-    public static ArchiveFragment newInstance(String param1, String param2) {
+    public static ArchiveFragment newInstance() {
         ArchiveFragment fragment = new ArchiveFragment();
         Bundle args = new Bundle();
         // add to bundle need be

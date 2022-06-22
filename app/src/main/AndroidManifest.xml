@@ -25,7 +25,7 @@
             android:name=".SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".TagsActivity"
+            android:name=".TagsFragment"
             android:exported="false" />
         <activity
             android:name=".NoteActivity"

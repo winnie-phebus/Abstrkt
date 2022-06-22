@@ -1,7 +1,6 @@
 package com.example.abstrkt;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,7 +33,6 @@ public class NotesFragment extends Fragment {
 
     private RecyclerView allFolders, allNotes;
     private FloatingActionButton addNew;
-    // TODO: Rename and change types of parameters
 
     private FirebaseUser user;
     private ActivityInterp interp;
@@ -92,6 +90,69 @@ public class NotesFragment extends Fragment {
         return v;
     }
 
+    private void loadFolders() {
+        Log.d(TAG, "loadFolders: ");
+        FirestoreRecyclerOptions<Folder> folders = newFoldersOption();
+
+        FirestoreRecyclerAdapter<Folder, FolderHolder> adapter =
+                new FirestoreRecyclerAdapter<Folder, FolderHolder>(folders) {
+                    @Override
+                    protected void onBindViewHolder(@NonNull FolderHolder holder, int position, @NonNull Folder model) {
+                        holder.getFolderName().setText(model.getName());
+                        holder.getLayout().setOnClickListener(new View.OnClickListener() {
+                            boolean isOpen = false;
+
+                            public void toggleIcon(){
+                                if (isOpen){
+                                    holder.getFolderIcon().setImageResource(R.drawable.folder_open_black);
+                                } else {
+                                    holder.getFolderIcon().setImageResource(R.drawable.folder_closed_black);
+                                }
+                            }
+
+                            @Override
+                            public void onClick(View view) {
+                                isOpen = !isOpen;
+                                toggleIcon();
+                                // TODO on click open a recycler view below with all notes in that folder
+                                // click to close
+                            }
+                        });
+                    }
+
+                    @NonNull
+                    @Override
+                    public FolderHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                        // layout = rootView.findViewById(R.id.folder_outsideContainer);
+
+/*                        layout.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // TODO on click open a recycler view below with all notes in that folder
+                                // change state of foler to open -> change icon to folder_open ressource file
+                                // click to close
+                            }
+                        });*/
+                        View view = LayoutInflater.from(parent.getContext())
+                                .inflate(R.layout.preview_folder, parent, false);
+                        return new FolderHolder(view);
+                    }
+                };
+
+        LinearLayoutManager llh = new LinearLayoutManager(getContext());
+        llh.setOrientation(RecyclerView.HORIZONTAL);
+        allFolders.setLayoutManager(llh);
+        allFolders.setAdapter(adapter);
+    }
+
+    private FirestoreRecyclerOptions<Folder> newFoldersOption() {
+        Log.d(TAG, "newFoldersOption: ");
+        return new FirestoreRecyclerOptions.Builder<Folder>()
+                .setQuery(buildQuery(Utils.FSF_COLLECTION, Utils.FSF_NAME), Folder.class)
+                .setLifecycleOwner(this)
+                .build();
+    }
+
     // opens a new Note to the viewer and also adds a new document to Firebase
     private View.OnClickListener openNote(Note curr) {
         return new View.OnClickListener() {
@@ -114,16 +175,11 @@ public class NotesFragment extends Fragment {
         };
     }
 
-
-
-    private void loadFolders() {
-    }
-
     private Query buildQuery(String collection, String order) {
         Query query = FirebaseFirestore.getInstance()
                 .collection(collection)
                 .whereEqualTo(Utils.FSN_OWNER, user.getDisplayName())
-                .orderBy(order)
+                // .orderBy(order)
                 .limit(50); // TODO: ++ - maybe add a filtering function?
 
         return query;
@@ -149,7 +205,6 @@ public class NotesFragment extends Fragment {
 
         FirestoreRecyclerAdapter<Note, NoteHolder> adapter =
                 new FirestoreRecyclerAdapter<Note, NoteHolder>(notes) {
-
                     @Override
                     public void onBindViewHolder(NoteHolder holder, int position, Note model) {
                         holder.getTitle().setText(model.getTitle());

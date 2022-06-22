@@ -29,8 +29,7 @@ public class NoteActivity extends AppCompatActivity {
     private List<String> tags;
     private Note note;
 
-    // private Note note;
-
+    // TODO: implement 'add tag to note'
 
     @Override
     protected void onStart() {
@@ -42,7 +41,6 @@ public class NoteActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // TODO: these should all be editTexts instead of Textviews
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
 

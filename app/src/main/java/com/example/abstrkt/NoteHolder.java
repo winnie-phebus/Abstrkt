@@ -13,6 +13,7 @@ public class NoteHolder extends RecyclerView.ViewHolder {
     private TextView title;
     private TextView noteSummary;
     private RecyclerView tags;
+
     public NoteHolder(@NonNull View itemView) {
         super(itemView);
         this.container = itemView.findViewById(R.id.np_outercontainer);

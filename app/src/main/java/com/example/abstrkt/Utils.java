@@ -11,4 +11,12 @@ public class Utils {
     public static final String FSN_TAGS = "tags";
     public static final String FSN_OWNER = "owner";
     public static final String FSN_ID = "id";
+
+    // the field values for Folder documents in Firebase, for ease and consistency
+    public static final String FSF_COLLECTION = "folders";
+    public static final String FSF_NAME = "name";
+    public static final String FSF_CONTAINS = "children";
+    public static final String FSF_OWNER = "owner";
+
+    // the
 }
