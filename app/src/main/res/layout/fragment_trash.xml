@@ -5,15 +5,18 @@
     android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TrashFragment" >
+    android:paddingHorizontal="0dp"
+    tools:context=".TrashFragment">
 
     <TextView
         android:id="@+id/trash_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="sans-serif-light"
         android:text="Trash"
+        android:textSize="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,10 +38,20 @@
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:paddingHorizontal="20dp"
         android:text="Delete All"
+        android:textAllCaps="false"
+        android:textColor="@color/primary_color"
+        android:textColorHighlight="@color/primary_color"
+        android:textColorLink="@color/primary_color"
+        android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="@+id/trash_title"
         app:layout_constraintEnd_toEndOf="@+id/arc_rv"
         app:layout_constraintTop_toTopOf="@+id/trash_title"
-        app:layout_constraintVertical_bias="0.482" />
+        app:layout_constraintVertical_bias="0.482"
+        app:rippleColor="@color/secondary_color"
+        app:strokeColor="@color/primary_color"
+        app:strokeWidth="0.5pt" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
