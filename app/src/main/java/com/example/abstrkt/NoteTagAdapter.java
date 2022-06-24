@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -62,7 +63,7 @@ public class NoteTagAdapter extends RecyclerView.Adapter<NoteTagAdapter.PillHold
     }
 
     protected static class PillHolder extends RecyclerView.ViewHolder {
-        MaterialButton button;
+        Button button;
 
         public PillHolder(@NonNull View itemView) {
             super(itemView);
@@ -70,11 +71,11 @@ public class NoteTagAdapter extends RecyclerView.Adapter<NoteTagAdapter.PillHold
             button = itemView.findViewById(R.id.nt_button);
         }
 
-        public MaterialButton getButton() {
+        public Button getButton() {
             return button;
         }
 
-        public void setButton(MaterialButton button) {
+        public void setButton(Button button) {
             this.button = button;
         }
     }

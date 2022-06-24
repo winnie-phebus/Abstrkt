@@ -63,7 +63,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/editText_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/editText_title"
-        app:srcCompat="@drawable/cross"
+        app:srcCompat="@mipmap/cross"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <EditText
