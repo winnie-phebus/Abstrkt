@@ -1,13 +1,16 @@
 package com.example.abstrkt;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +21,8 @@ import androidx.fragment.app.FragmentContainerView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Locale;
 
 public class HomePage extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener, Utils.ActivityInterp{
     public static final String TAG = "ABSTRACT_HOME";
@@ -83,6 +88,28 @@ public class HomePage extends AppCompatActivity implements  NavigationView.OnNav
                 .addToBackStack("tag")
                 .replace(R.id.hp_frag_container, TagsFragment.newSpecificInstance(currentTag))
                 .commit();
+    }
+
+    @Override
+    public void openNewDialog(String title, String collection){
+        AlertDialog.Builder newDialog = new AlertDialog.Builder(this);
+        View v = getLayoutInflater().inflate(R.layout.dialog_new_ft, null);
+        newDialog.setView(v);
+
+        newDialog.setTitle("CREATE NEW "+ collection.toUpperCase(Locale.ROOT));
+        //TextView titleTV = findViewById(R.id.dialog_title);
+        //titleTV.setText("CREATE NEW "+ collection.toUpperCase(Locale.ROOT));
+        newDialog.show();
+
+        TextView input = v.findViewById(R.id.dialog_input);
+
+        Button submit = v.findViewById(R.id.dialog_submit);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.updateCollectionOnFB(user.getDisplayName(), collection, input.getText().toString());
+            }
+        });
     }
 
     @Override

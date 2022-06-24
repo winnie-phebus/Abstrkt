@@ -25,6 +25,7 @@ import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class Utils {
     private static final String TAG = "ABSTRACT_UTILS";
@@ -53,6 +54,9 @@ public class Utils {
     public static final String N_SAVED = "SAVED";
     public static final String N_ARCHIVED = "HIDDEN";
     public static final String N_TRASH = "TO DELETE";
+    // the different menu strings for the addnew popup menu
+    public static final String PLUS_NOTE = "+ Note";
+    public static final String PLUS_FOLDER = "New Folder";
 
     // UNIVERSAL / GENERALLY USEFUL METHODS:
 
@@ -97,6 +101,7 @@ public class Utils {
         return notes;
     }
 
+    // returns the adapter that adjusts the NoteAdapter Logic so that it applies for tags
     public static FirestoreRecyclerAdapter<Note, NoteHolder> buildTagAdapter(TagsFragment frag, Context context, Query query){
         FirestoreRecyclerOptions<Note> notes = newNotesOption(context, query);
 
@@ -107,20 +112,15 @@ public class Utils {
                 Note finalModel = model;
 
                 holder.getTitle().setText(model.getTitle());
+                holder.getNoteSummary().setVisibility(View.GONE);
 
-                String summary = model.getAbstract();
-                if (model.getAbstract() == null || TextUtils.isEmpty(model.getAbstract())) {
-                    summary = model.getBody();
+                if (model.getTags() != null && model.getTags().size() != 0) {
+                    // the 'tags' of a tag are actually its rules :)
+                    LinearLayoutManager llh = new LinearLayoutManager(context);
+                    llh.setOrientation(RecyclerView.HORIZONTAL);
+                    holder.getTags().setLayoutManager(llh);
+                    holder.getTags().setAdapter(new NoteTagAdapter(model.getTags()));
                 }
-
-                holder.getNoteSummary().setText(summary);
-
-                // the 'tags' of a tag are actually its rules :)
-                LinearLayoutManager llh = new LinearLayoutManager(context);
-                llh.setOrientation(RecyclerView.HORIZONTAL);
-                holder.getTags().setLayoutManager(llh);
-                holder.getTags().setAdapter(new NoteTagAdapter(model.getTags()));
-
 
                 holder.getContainer().setOnClickListener(
                         new View.OnClickListener() {
@@ -190,6 +190,8 @@ public class Utils {
         };
     }
 
+    // FIRESTORE //
+
     // removes the note from Firestore
     // used to not save blank notes and in trash / rules
     public static void deleteNote(Context context, String id) {
@@ -211,24 +213,35 @@ public class Utils {
                 });
     }
 
+
+    // VIEWS + CONTEXT EXT //
     // just a shorthand for making consistent toasts
     public static void toast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
+    // opens the dialogs that take in input for naming a new collection item
+    public static void openAddDialog(Context context, String title, String collection){
+        buildInterp(context).openNewDialog(title, collection);
+    }
+
+    // NAVIGATION //
+    // takes the given context and transforms it into an ActivityInterpreter to interact with
     public static ActivityInterp buildInterp(Context context){
         return (ActivityInterp) context;
     }
 
+    // tells the given parent activity to open a specific note in TagsFragment
     public static void openTagFragment(Context context, String currentTag) {
         buildInterp(context).openTagFragment(currentTag);
     }
 
+    // tells the given parent activity to open a specific note in NoteActivity
     public static void openNoteActivity(Context context, Note curr) {
         buildInterp(context).openNoteActivity(curr);
     }
 
-    // returns the current time
+    // returns the current time in Date format
     public static Date exactTime() {
         return Timestamp.from(ZonedDateTime.now().toInstant());
     }
@@ -243,9 +256,29 @@ public class Utils {
         return makeTag(new Note(owner, new ArrayList<String>()));
     }
 
+    // adds the new given String item to a collection on Firestore
+    private static void addCollectionItemToFB(String ownerName, String collection, String field, String toString) {
+        HashMap<String, String> item = new HashMap<>();
+        item.put(FSF_OWNER, ownerName);
+        item.put(field, toString);
+
+        FirebaseFirestore.getInstance().collection(collection).add(item);
+    }
+
+    // adds a new String item to a collection on Firestore based on collection type
+    public static void updateCollectionOnFB(String ownerName, String collection, String toString) {
+        if (collection.equals(FSF_COLLECTION)){
+            addCollectionItemToFB(ownerName, collection, FSF_NAME, toString);
+        } else if (collection.equals(FST_COLLECTION)){
+            addCollectionItemToFB(ownerName, collection, FSN_TITLE, toString);
+        }
+    }
+
     // an interface that lets Util open the NoteActivity as needed
     interface ActivityInterp {
         void openNoteActivity(Note note);
         void openTagFragment(String currentTag);
+
+        void openNewDialog(String title, String onClick);
     }
 }
