@@ -148,7 +148,7 @@ public class HomePage extends AppCompatActivity implements  NavigationView.OnNav
                 mItemOpens("Trash", TrashFragment.newInstance());
                 return true;
             case R.id.nav_settings:
-                mItemOpens("Setting", NotesFragment.newInstance()); //TODO: make Settings a Fragment
+                mItemOpens("Setting", SettingsFragment.newInstance()); //TODO: make Settings a Fragment
             default:
                 return super.onOptionsItemSelected(item);
         }
