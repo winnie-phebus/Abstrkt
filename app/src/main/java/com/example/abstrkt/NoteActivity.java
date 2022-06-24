@@ -67,7 +67,6 @@ public class NoteActivity extends AppCompatActivity {
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO before sending back home, save changes
                 updateNoteFB();
                 Intent toHome = new Intent(NoteActivity.this, HomePage.class);
                 startActivity(toHome);
@@ -89,14 +88,47 @@ public class NoteActivity extends AppCompatActivity {
         this.tags = tags;
     }
 
-    private void noteUpdate(){
-        note.setTitle(title.getText().toString());
-        note.setAbstract(noteAbstract.getText().toString());
-        note.setBody(noteBody.getText().toString());
+    // checks what part of the note has been updated by user, deletes basic notes
+    private boolean noteUpdate() {
+        boolean newTitle = isChanged(note.getTitle(), title.getText().toString());
+        boolean newAbstract = isChanged(note.getAbstract(), noteAbstract.getText().toString());
+        boolean newBody = isChanged(note.getBody(), noteBody.getText().toString());
+
+        boolean noUpdate = !(newTitle || newAbstract || newBody);
+
+        if (noUpdate) { // deletes the empty note case
+            note.setStatus(Utils.N_TRASH);
+            Utils.deleteNote(this, note.getId());
+            return false;
+        }
+
+        if (newTitle) {
+            note.setTitle(title.getText().toString());
+        }
+
+        if (newAbstract) {
+            note.setAbstract(noteAbstract.getText().toString());
+        }
+
+        if (newBody) {
+            note.setBody(noteBody.getText().toString());
+        }
+
+        if (isChanged(note.getStatus(), Utils.N_SAVED)){
+            note.setStatus(Utils.N_SAVED);
+        }
+
         note.updateNote();
+        return true;
     }
 
-    public void updateNoteFB(){
+    // simple String comparison, used to only update things as needed
+    private boolean isChanged(String og, String proposed) {
+        return !og.equals(proposed);
+    }
+
+    // Updating the Note in Firebase Firestore
+    public void updateNoteFB() {
         noteUpdate();
         Log.d("NOTE ACTIVITY", note.getId());
         FirebaseFirestore.getInstance()
@@ -106,6 +138,7 @@ public class NoteActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(NoteActivity.this, "saving note failed!", Toast.LENGTH_SHORT);
+                        // TODO: make a Note backup system so that a revert local note system can be enacted in this case
                     }
                 });
     }
