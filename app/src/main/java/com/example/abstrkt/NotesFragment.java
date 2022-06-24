@@ -1,11 +1,19 @@
 package com.example.abstrkt;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,20 +35,19 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.BreakIterator;
 import java.util.ArrayList;
 
 public class NotesFragment extends Fragment {
     public static final String TAG = "ABSTRACT_NOTES";
     protected int openFolder = -1;
-    private RecyclerView allFolders, folderNotes, allNotes;
+    private RecyclerView allFolders, allNotes;
     private FloatingActionButton addNew;
     private FirebaseUser user;
-    private ActivityInterp interp;
     private String ownerName;
     private TextView noteText;
     private FirestoreRecyclerAdapter<Note, NoteHolder> adapter;
 
+    // for Firebase class building
     public NotesFragment() {
         // Required empty public constructor
     }
@@ -61,7 +68,6 @@ public class NotesFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        interp = (ActivityInterp) context;
     }
 
     @Override
@@ -88,7 +94,7 @@ public class NotesFragment extends Fragment {
                     }
                 });
 
-        addNew.setOnClickListener(openNote(new Note(user.getDisplayName(), new ArrayList<String>())));
+        addNew.setOnClickListener(addNewClicked());
         return v;
     }
 
@@ -139,8 +145,6 @@ public class NotesFragment extends Fragment {
                         int pos = holder.getAbsoluteAdapterPosition();
                         holder.getFolderName().setText(model.getName());
                         holder.getLayout().setOnClickListener(new View.OnClickListener() {
-                            boolean isOpen = false;
-
                             @Override
                             public void onClick(View view) {
                                 checkStatus(holder, pos, model.getName());
@@ -178,26 +182,53 @@ public class NotesFragment extends Fragment {
                 .build();
     }
 
-    // opens a new Note to the viewer and also adds a new document to Firebase
-    private View.OnClickListener openNote(Note curr) {
+    private View.OnClickListener addNewClicked(){
+        // the add New Folder case pressed
+
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DocumentReference ref = FirebaseFirestore.getInstance()
-                        .collection(Utils.FSN_COLLECTION)
-                        .document();
+                PopupMenu addMenu = new PopupMenu(getContext(), view, Gravity.RIGHT);
+                Menu in = addMenu.getMenu();
 
-                curr.setId(ref.getPath());
+                MenuItem plusNote = in.add(Utils.PLUS_NOTE);
+                // plusNote.setIcon(R.drawable.) TODO: add icons!
+                MenuItem plusFolder = in.add(Utils.PLUS_FOLDER);
 
-                ref.set(curr)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                interp.openNoteActivity(curr);
-                            }
-                        });
+                MenuItem plusTag = in.add(Utils.PLUS_TAG);
+
+                addMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        if (menuItem.getTitle() == Utils.PLUS_NOTE){ // the add New Note case pressed
+                            openNote(new Note(user.getDisplayName(), new ArrayList<String>()));
+                        } else if (menuItem.getTitle() == Utils.PLUS_FOLDER){
+                            Utils.openAddDialog(getContext(), Utils.FSF_COLLECTION);
+                        } else if (menuItem.getTitle().equals(Utils.PLUS_TAG)){
+                            Utils.openAddDialog(getContext(),Utils.FST_COLLECTION);
+                        }
+                        return true;
+                    }
+                });
+                addMenu.show();
             }
         };
+    }
+    // opens a new Note to the viewer and also adds a new document to Firebase
+    private void openNote(Note curr) {
+        DocumentReference ref = FirebaseFirestore.getInstance()
+                .collection(Utils.FSN_COLLECTION)
+                .document();
+
+        curr.setId(ref.getPath());
+
+        ref.set(curr)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Utils.openNoteActivity(getContext(), curr);
+                    }
+                });
     }
 
     // builds the adapter with the given query
@@ -219,8 +250,12 @@ public class NotesFragment extends Fragment {
 
     // changes the Folder the given note belongs to
     private void addNoteToFolder(Note child, Folder parent) {
-        // parent.addChild(Utils.docRefFromStr(child.getId()));
         child.setFolder(parent.getName());
+    }
+
+    // update the given Note's status - TODO: might be unnecessary
+    private void changeNoteStatus(Note note, String newStatus){
+        note.setStatus(newStatus);
     }
 
     // changes adds a new Tag for the given note
@@ -228,7 +263,5 @@ public class NotesFragment extends Fragment {
         subject.getTags().add(newTag);
     }
 
-    interface ActivityInterp {
-        void openNoteActivity(Note note);
-    }
+
 }

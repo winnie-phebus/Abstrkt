@@ -1,13 +1,16 @@
 package com.example.abstrkt;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +22,9 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class HomePage extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener, NotesFragment.ActivityInterp, Utils.ActivityInterp{
+import java.util.Locale;
+
+public class HomePage extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener, Utils.ActivityInterp{
     public static final String TAG = "ABSTRACT_HOME";
     public static final String NOTE = "NOTE_EXTRA";
 
@@ -71,6 +76,46 @@ public class HomePage extends AppCompatActivity implements  NavigationView.OnNav
         Intent toNote = new Intent(this, NoteActivity.class);
         toNote.putExtra(NOTE, curr);
         startActivity(toNote);
+    }
+
+    @Override
+    public void openTagFragment(String currentTag) {
+        // TagsFragment specificTag = TagsFragment.newInstance();
+        //specificTag.showTagNotes(currentTag);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack("tag")
+                .replace(R.id.hp_frag_container, TagsFragment.newSpecificInstance(currentTag))
+                .commit();
+    }
+
+    @Override
+    public void openNewDialog(String collection){
+        AlertDialog newDialog = new AlertDialog.Builder(this).create();
+        View v = getLayoutInflater().inflate(R.layout.dialog_new_ft, null);
+        newDialog.setView(v);
+
+        newDialog.setTitle("ADD NEW TO "+ collection.toUpperCase(Locale.ROOT));
+        newDialog.show();
+
+        TextView input = v.findViewById(R.id.dialog_input);
+
+        v.findViewById(R.id.dialog_submit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.updateCollectionOnFB(user.getDisplayName(), collection, input.getText().toString());
+                newDialog.dismiss();
+            }
+        });
+
+        v.findViewById(R.id.dialog_cross).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                newDialog.dismiss();
+            }
+        });
+
     }
 
     @Override

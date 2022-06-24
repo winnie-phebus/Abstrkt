@@ -96,7 +96,7 @@ public class NoteActivity extends AppCompatActivity {
 
         boolean noUpdate = !(newTitle || newAbstract || newBody);
 
-        if (noUpdate) { // deletes the empty note case
+        if (noUpdate && (note.getStatus().equals(Utils.N_BLANK))) { // deletes the empty note case
             note.setStatus(Utils.N_TRASH);
             Utils.deleteNote(this, note.getId());
             return false;

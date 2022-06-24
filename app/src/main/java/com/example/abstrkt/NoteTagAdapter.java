@@ -51,6 +51,7 @@ public class NoteTagAdapter extends RecyclerView.Adapter<NoteTagAdapter.PillHold
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: user clicked " + currentTag);
+                Utils.openTagFragment(view.getContext(), currentTag);
             }
         };
     }
