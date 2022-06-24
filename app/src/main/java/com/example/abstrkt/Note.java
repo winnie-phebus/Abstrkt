@@ -23,7 +23,10 @@ public class Note implements Parcelable {
             return new Note[size];
         }
     };
+
     private String id;
+    private String status;
+    private String folder;
     private String title;
     private String noteAbstract;
     private String body;
@@ -42,6 +45,7 @@ public class Note implements Parcelable {
         this.createdOn = Timestamp.from(ZonedDateTime.now().toInstant());
         this.updatedOn = Timestamp.from(ZonedDateTime.now().toInstant());
         this.tags = tags;
+        this.status = Utils.N_BLANK;
     }
 
     public Note(String title, String noteAbstract, String body, Timestamp createdOn, Timestamp updatedOn, List<String> tags) {
@@ -64,6 +68,24 @@ public class Note implements Parcelable {
         updatedOn = new Date(in.readLong());
         // the id, or proceeding metadata
         id = in.readString();
+        status = in.readString();
+        folder = in.readString();
+    }
+
+    public String getFolder() {
+        return folder;
+    }
+
+    public void setFolder(String folder) {
+        this.folder = folder;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getId() {
@@ -126,13 +148,16 @@ public class Note implements Parcelable {
         this.body = body;
     }
 
-
     public List<String> getTags() {
         return tags;
     }
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    public void addTag(String newTag) {
+        this.tags.add(newTag);
     }
 
     @Override
@@ -153,5 +178,7 @@ public class Note implements Parcelable {
         parcel.writeLong(getUpdatedOn().getTime());
         // metadata
         parcel.writeString(getId());
+        parcel.writeString(getStatus());
+        parcel.writeString(getFolder());
     }
 }

@@ -1,13 +1,18 @@
 package com.example.abstrkt;
 
+import android.content.Context;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 /**
@@ -17,6 +22,8 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class TrashFragment extends Fragment {
     private FirebaseUser user;
+    private Button clearTrash;
+    private RecyclerView trashNotes;
 
     public TrashFragment() {
         // Required empty public constructor
@@ -24,26 +31,44 @@ public class TrashFragment extends Fragment {
 
     public static TrashFragment newInstance() {
         TrashFragment fragment = new TrashFragment();
-        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_trash, container, false);
+        View v = inflater.inflate(R.layout.fragment_trash, container, false);
+
+        clearTrash = v.findViewById(R.id.trash_clear);
+        clearTrash.setOnClickListener(deleteAllTrash());
+        trashNotes = v.findViewById(R.id.arc_rv);
+
+        trashNotes.setLayoutManager(new LinearLayoutManager(getContext()));
+        trashNotes.setAdapter(
+                Utils.buildNoteAdapter(getContext(),
+                        Utils.buildStatusQuery(user.getDisplayName(), Utils.N_TRASH)));
+        return v;
+    }
+
+    private View.OnClickListener deleteAllTrash() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.toast(getContext(), "Working on it! :P");
+                // TODO: implement this! :) -- figure out how to traverse the query list and delete
+            }
+        };
     }
 }

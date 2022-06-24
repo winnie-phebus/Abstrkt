@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,16 +27,19 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.BreakIterator;
 import java.util.ArrayList;
 
 public class NotesFragment extends Fragment {
     public static final String TAG = "ABSTRACT_NOTES";
-
-    private RecyclerView allFolders, allNotes;
+    protected int openFolder = -1;
+    private RecyclerView allFolders, folderNotes, allNotes;
     private FloatingActionButton addNew;
-
     private FirebaseUser user;
     private ActivityInterp interp;
+    private String ownerName;
+    private TextView noteText;
+    private FirestoreRecyclerAdapter<Note, NoteHolder> adapter;
 
     public NotesFragment() {
         // Required empty public constructor
@@ -43,21 +47,15 @@ public class NotesFragment extends Fragment {
 
     public static NotesFragment newInstance() {
         NotesFragment fragment = new NotesFragment();
-        // Bundle args = new Bundle();
-        // args.putString(ARG_PARAM1, param1);
-        // args.putString(ARG_PARAM2, param2);
-        //fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-/*        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }*/
+
         user = FirebaseAuth.getInstance().getCurrentUser();
+        ownerName = user.getDisplayName();
     }
 
     @Override
@@ -71,20 +69,24 @@ public class NotesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_notes, container, false);
+        noteText = v.findViewById(R.id.textView_notes);
         allFolders = v.findViewById(R.id.recyclerView_allFolders);
         allNotes = v.findViewById(R.id.recyclerView_allNotes);
         addNew = v.findViewById(R.id.hp_new_note_fab);
 
         loadFolders();
 
-        Query userNotes = buildQuery(Utils.FSN_COLLECTION, Utils.FSN_UPDATED);
-        loadNotes(userNotes);
-        FirebaseFirestore.getInstance().collection(Utils.FSN_COLLECTION).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                updateAdapter();
-            }
-        });
+        loadNotes();
+
+        FirebaseFirestore.getInstance()
+                .collection(Utils.FSN_COLLECTION)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        //loadNotes();
+                        adapter.notifyDataSetChanged();
+                    }
+                });
 
         addNew.setOnClickListener(openNote(new Note(user.getDisplayName(), new ArrayList<String>())));
         return v;
@@ -96,43 +98,65 @@ public class NotesFragment extends Fragment {
 
         FirestoreRecyclerAdapter<Folder, FolderHolder> adapter =
                 new FirestoreRecyclerAdapter<Folder, FolderHolder>(folders) {
+  /*                  protected void forceDefer(@NonNull FolderHolder holder, int pos, String name){
+                        checkStatus(pos, name);
+                        toggleIcon(holder, pos);
+                    }*/
+
+                    public void toggleIcon(@NonNull FolderHolder holder, int pos) {
+                        if (isOpenFolder(pos)) {
+                            holder.getFolderIcon().setImageResource(R.drawable.folder_open_black);
+                        } else {
+                            holder.getFolderIcon().setImageResource(R.drawable.folder_closed_black);
+                        }
+                    }
+
+                    private boolean isOpenFolder(int pos){
+                        return openFolder == pos;
+                    }
+
+                    private void checkStatus(@NonNull FolderHolder holder, int pos, String name){
+                        if (isOpenFolder(pos)) { // folder is open and should close
+                            Log.d(TAG, "onClick: folder should close.");
+                            openFolder = -1;
+                            loadNotes();
+                        }else { // for case openFolder is empty and someone else
+/*                            if (openFolder != -1){
+                                this.getItemViewType(pos);
+                                forceDefer(holder, pos, name);
+                            }*/
+                            openFolder = pos;
+                            updateAdapter(
+                                    "All Notes in Folder: " + name,
+                                    Utils.buildFieldQuery(ownerName, Utils.FSN_FOLDER, name));
+                        }
+                        toggleIcon(holder, pos);
+                    }
+
                     @Override
                     protected void onBindViewHolder(@NonNull FolderHolder holder, int position, @NonNull Folder model) {
+
+                        int pos = holder.getAbsoluteAdapterPosition();
                         holder.getFolderName().setText(model.getName());
                         holder.getLayout().setOnClickListener(new View.OnClickListener() {
                             boolean isOpen = false;
 
-                            public void toggleIcon(){
-                                if (isOpen){
-                                    holder.getFolderIcon().setImageResource(R.drawable.folder_open_black);
-                                } else {
-                                    holder.getFolderIcon().setImageResource(R.drawable.folder_closed_black);
-                                }
-                            }
-
                             @Override
                             public void onClick(View view) {
-                                isOpen = !isOpen;
-                                toggleIcon();
-                                // TODO on click open a recycler view below with all notes in that folder
-                                // click to close
+                                checkStatus(holder, pos, model.getName());
+                                toggleIcon(holder, pos);
                             }
                         });
+                    }
+
+                    @Override
+                    public void startListening() {
+                        super.startListening();
                     }
 
                     @NonNull
                     @Override
                     public FolderHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                        // layout = rootView.findViewById(R.id.folder_outsideContainer);
-
-/*                        layout.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                // TODO on click open a recycler view below with all notes in that folder
-                                // change state of foler to open -> change icon to folder_open ressource file
-                                // click to close
-                            }
-                        });*/
                         View view = LayoutInflater.from(parent.getContext())
                                 .inflate(R.layout.preview_folder, parent, false);
                         return new FolderHolder(view);
@@ -141,6 +165,7 @@ public class NotesFragment extends Fragment {
 
         LinearLayoutManager llh = new LinearLayoutManager(getContext());
         llh.setOrientation(RecyclerView.HORIZONTAL);
+
         allFolders.setLayoutManager(llh);
         allFolders.setAdapter(adapter);
     }
@@ -148,7 +173,7 @@ public class NotesFragment extends Fragment {
     private FirestoreRecyclerOptions<Folder> newFoldersOption() {
         Log.d(TAG, "newFoldersOption: ");
         return new FirestoreRecyclerOptions.Builder<Folder>()
-                .setQuery(buildQuery(Utils.FSF_COLLECTION, Utils.FSF_NAME), Folder.class)
+                .setQuery(Utils.buildCollectionQuery(ownerName, Utils.FSF_COLLECTION), Folder.class)
                 .setLifecycleOwner(this)
                 .build();
     }
@@ -175,77 +200,32 @@ public class NotesFragment extends Fragment {
         };
     }
 
-    private Query buildQuery(String collection, String order) {
-        Query query = FirebaseFirestore.getInstance()
-                .collection(collection)
-                .whereEqualTo(Utils.FSN_OWNER, user.getDisplayName())
-                // .orderBy(order)
-                .limit(50); // TODO: ++ - maybe add a filtering function?
+    // builds the adapter with the given query
+    private void updateAdapter(String title, Query query) {
+        noteText.setText(title);
+        adapter = Utils.buildNoteAdapter(getContext(), query);
 
-        return query;
-    }
-
-    private FirestoreRecyclerOptions<Note> newNotesOption(Query query) {
-        FirestoreRecyclerOptions<Note> notes = new FirestoreRecyclerOptions.Builder<Note>()
-                .setQuery(query, Note.class)
-                .setLifecycleOwner(this)
-                .build();
-
-        return notes;
-    }
-
-    private void updateAdapter() {
-        loadNotes(buildQuery(Utils.FSN_COLLECTION, Utils.FSN_UPDATED));
-    }
-
-    private void loadNotes(Query query) {
-        Log.d(TAG, "loadNotes: called.");
-
-        FirestoreRecyclerOptions<Note> notes = newNotesOption(query);
-
-        FirestoreRecyclerAdapter<Note, NoteHolder> adapter =
-                new FirestoreRecyclerAdapter<Note, NoteHolder>(notes) {
-                    @Override
-                    public void onBindViewHolder(NoteHolder holder, int position, Note model) {
-                        holder.getTitle().setText(model.getTitle());
-
-                        String summary = model.getAbstract();
-                        if (model.getAbstract() == null) {
-                            summary = model.getBody();
-                        }
-
-                        holder.getNoteSummary().setText(summary);
-
-                        LinearLayoutManager llh = new LinearLayoutManager(getContext());
-                        llh.setOrientation(RecyclerView.HORIZONTAL);
-                        holder.getTags().setLayoutManager(llh);
-                        holder.getTags().setAdapter(new NoteTagAdapter(model.getTags()));
-
-                        holder.getContainer().setOnClickListener(
-                                new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        interp.openNoteActivity(model);
-                                    }
-                                }
-                        );
-                    }
-
-                    @NonNull
-                    @Override
-                    public NoteHolder onCreateViewHolder(ViewGroup group, int i) {
-                        // Create a new instance of the ViewHolder, in this case we are using a custom
-                        // layout called R.layout.message for each item
-                        View view = LayoutInflater.from(group.getContext())
-                                .inflate(R.layout.preview_note, group, false);
-
-                        return new NoteHolder(view);
-                    }
-                };
-
-        // FirestoreRecyclerOptions.Builder().setLifecycleOwner(...)
         allNotes.setLayoutManager(new LinearLayoutManager(getContext()));
         allNotes.setAdapter(adapter);
+    }
+
+    // loads all the notes in Firestore of the status 'saved', regardless of tags or folders
+    private void loadNotes() {
+        Log.d(TAG, "loadNotes: called.");
+
+        Query query = Utils.buildStatusQuery(ownerName, Utils.N_SAVED);
+        updateAdapter(ownerName + "'s Notes", query);
+    }
+
+    // changes the Folder the given note belongs to
+    private void addNoteToFolder(Note child, Folder parent) {
+        // parent.addChild(Utils.docRefFromStr(child.getId()));
+        child.setFolder(parent.getName());
+    }
+
+    // changes adds a new Tag for the given note
+    private void addNewTagToNote(Note subject, String newTag) {
+        subject.getTags().add(newTag);
     }
 
     interface ActivityInterp {
