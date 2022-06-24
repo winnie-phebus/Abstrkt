@@ -14,7 +14,7 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="GreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="GreenTheme" parent="Theme.Abstrkt.NoActionBar">
         <!-- default green light theme-->
         <item name="colorPrimary">@color/green_main</item>
         <item name="colorSecondary">@color/green_light</item>
@@ -34,9 +34,10 @@
 
     <!--- TODO: customize our personal theme to match this standard: https://github.com/firebase/FirebaseUI-Android/blob/master/docs/upgrade-to-8.0.md in the auth transition to material components section-->
     <!-- https://m3.material.io/ for material Design ref -->
-    <style name="Theme.Abstrkt.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="Theme.Abstrkt.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearanceOverlay.Cut.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearanceOverlay.Cut.Medium</item>
     </style>
 
     <!-- style name="Theme.Abstrkt.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" /> -->

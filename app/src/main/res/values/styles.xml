@@ -6,6 +6,16 @@
         <item name="backgroundColor">@color/primary_color</item>
     </style>
 
+    <style name="ShapeAppearanceOverlay.Cut">
+        <item name="cornerSize">25%</item>
+        <item name="cornerFamily">cut</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.Cut.Medium">
+        <item name="cornerSize">16dp</item>
+        <item name="cornerFamily">cut</item>
+    </style>
+
     <style name="GreenTheme1" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- default green light theme-->
         <item name="colorPrimary">@color/green_main</item>
