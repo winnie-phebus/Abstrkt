@@ -1,6 +1,7 @@
 package com.example.abstrkt;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,14 +16,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -199,7 +208,17 @@ public class Utils {
     // date formatter
     public static String formatDate(Date updatedOn) {
         // TODO: date format
-        return updatedOn.toString();
+
+        String format = "MM/dd/yyyy";
+        DateTimeFormatter dateFromatter = DateTimeFormatter.ofPattern(format);
+
+        LocalDate localDate = Instant.ofEpochMilli(updatedOn.getTime())
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+
+        return dateFromatter.format(localDate);
+
+        //return updatedOn.toString();
     }
 
     // FIRESTORE //
@@ -284,6 +303,12 @@ public class Utils {
             addCollectionItemToFB(ownerName, collection, FSN_TITLE, toString);
         }
     }
+
+    public static void signOutOfAccount(){
+        FirebaseAuth.getInstance().signOut();
+        Log.d("noar", "u failed");
+    }
+
 
     // an interface that lets Util open the NoteActivity as needed
     interface ActivityInterp {

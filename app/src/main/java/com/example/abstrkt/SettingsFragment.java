@@ -1,9 +1,12 @@
 package com.example.abstrkt;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,12 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SettingsFragment extends Fragment {
 
@@ -55,14 +64,33 @@ public class SettingsFragment extends Fragment {
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: log out of account
+                Utils.signOutOfAccount();
+                Intent leaveAccount = new Intent(getActivity(), MainActivity.class);
+                startActivity(leaveAccount);
             }
         });
 
         deleteAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: delete account
+                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("no","OK! Works fine!");
+                            Intent leaveAccount = new Intent(getActivity(), MainActivity.class);
+                            startActivity(leaveAccount);                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("no","Ocurrio un error durante la eliminación del usuario", e);
+                    }
+                });
+
+
             }
         });
 

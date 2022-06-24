@@ -19,7 +19,7 @@
         android:fontFamily="sans-serif-black"
         android:text="TextView"
         android:textColor="@color/black"
-        android:textSize="16dp"
+        android:textSize="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,10 +30,10 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="20dp"
-        android:fontFamily="sans-serif"
+        android:fontFamily="sans-serif-light"
         android:text="TextView"
         android:textColor="@color/black"
-        android:textSize="13dp"
+        android:textSize="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/np_title"
         app:layout_constraintTop_toBottomOf="@+id/np_title" />
@@ -92,7 +92,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:fontFamily="sans-serif-light"
-        android:text="TextView"
+        android:text="No Rules Applied"
         android:textColor="@color/black"
         android:textSize="13dp"
         app:layout_constraintBottom_toBottomOf="@+id/np_ruleIcon"
