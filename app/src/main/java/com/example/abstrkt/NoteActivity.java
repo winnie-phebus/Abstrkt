@@ -60,8 +60,8 @@ public class NoteActivity extends AppCompatActivity {
 
         title.setText(note.getTitle());
         noteAbstract.setText(note.getAbstract());
-        createdOn.setText(formatDate(note.getCreatedOn()));
-        lastUpdated.setText(formatDate(note.getUpdatedOn()));
+        createdOn.setText(Utils.formatDate(note.getCreatedOn()));
+        lastUpdated.setText(Utils.formatDate(note.getUpdatedOn()));
         noteBody.setText(note.getBody());
 
         close.setOnClickListener(new View.OnClickListener() {
@@ -73,12 +73,6 @@ public class NoteActivity extends AppCompatActivity {
             }
         });
     }
-
-    private String formatDate(Date date) {
-        // TODO: make this look nice??
-        return date.toString();
-    }
-
 
     public List<String> getTags() {
         return tags;

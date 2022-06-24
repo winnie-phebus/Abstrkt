@@ -13,6 +13,7 @@ public class NoteHolder extends RecyclerView.ViewHolder {
     private TextView title;
     private TextView noteSummary;
     private RecyclerView tags;
+    private TextView lastUpdated;
 
     public NoteHolder(@NonNull View itemView) {
         super(itemView);
@@ -21,6 +22,7 @@ public class NoteHolder extends RecyclerView.ViewHolder {
         this.noteSummary = itemView.findViewById(R.id.np_summary);
 
         this.tags = itemView.findViewById(R.id.np_tagsRV);
+        this.lastUpdated = itemView.findViewById(R.id.np_lastUpdateText);
     }
 
     public ConstraintLayout getContainer() {
@@ -53,5 +55,13 @@ public class NoteHolder extends RecyclerView.ViewHolder {
 
     public void setTags(RecyclerView tags) {
         this.tags = tags;
+    }
+
+    public TextView getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(TextView lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }
