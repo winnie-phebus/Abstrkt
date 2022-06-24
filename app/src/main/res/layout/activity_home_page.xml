@@ -15,31 +15,32 @@
             android:id="@+id/imageView_searchIcon"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="-40dp"
             app:layout_constraintBottom_toBottomOf="@+id/editText_Search"
-            app:layout_constraintStart_toEndOf="@+id/imageButton_Menu"
+            app:layout_constraintStart_toEndOf="@+id/editText_Search"
             app:layout_constraintTop_toTopOf="@+id/editText_Search"
+            app:layout_constraintVertical_bias="0.32999998"
             app:srcCompat="@drawable/search" />
 
         <EditText
             android:id="@+id/editText_Search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:fontFamily="sans-serif-light"
             android:hint="Search"
-            android:minHeight="48dp"
 
+            android:minHeight="48dp"
             android:textColor="@color/black"
             android:textColorHighlight="@color/primary_color"
-            android:textColorHint="@color/primary_color"
+            android:textColorHint="@color/black"
             android:textColorLink="@color/primary_color"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView_searchIcon"
+            app:layout_constraintStart_toEndOf="@+id/imageButton_Menu"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
@@ -47,6 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:background="#00FFFFFF"
             android:minWidth="48dp"
             android:minHeight="48dp"
             android:scaleType="fitXY"
@@ -54,7 +56,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/editText_Search"
             app:layout_constraintVertical_bias="0.5"
-            app:srcCompat="@drawable/camera"
+            app:srcCompat="@mipmap/menu"
             tools:ignore="SpeakableTextPresentCheck" />
 
         <androidx.fragment.app.FragmentContainerView
@@ -62,9 +64,7 @@
             android:name="com.example.abstrkt.NotesFragment"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginTop="24dp"
             android:layout_marginBottom="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

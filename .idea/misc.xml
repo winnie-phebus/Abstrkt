@@ -18,9 +18,10 @@
         <entry key="..\:/Users/doron/AndroidStudioProjects/Abstrkt/app/src/main/res/layout/preview_folder.xml" value="0.67" />
         <entry key="..\:/Users/doron/AndroidStudioProjects/Abstrkt/app/src/main/res/layout/preview_note.xml" value="0.33" />
         <entry key="..\:/Users/doron/AndroidStudioProjects/Abstrkt/app/src/main/res/menu/navigation_menu.xml" value="0.1734375" />
+        <entry key="app/src/main/res/drawable-v24/note_preview_background.xml" value="0.2205" />
         <entry key="app/src/main/res/drawable/pill_bg.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_hidden.xml" value="0.2953125" />
-        <entry key="app/src/main/res/layout/activity_home_page.xml" value="0.33357543945312507" />
+        <entry key="app/src/main/res/layout/activity_home_page.xml" value="0.26603393554687504" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.23676147460937502" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.19924774169921877" />
         <entry key="app/src/main/res/layout/activity_note.xml" value="0.21886901855468752" />
@@ -32,15 +33,16 @@
         <entry key="app/src/main/res/layout/fragment_archive.xml" value="0.2796875" />
         <entry key="app/src/main/res/layout/fragment_first.xml" value="0.18333333333333332" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.271002197265625" />
-        <entry key="app/src/main/res/layout/fragment_notes.xml" value="0.18326873779296876" />
+        <entry key="app/src/main/res/layout/fragment_notes.xml" value="0.3424713134765625" />
         <entry key="app/src/main/res/layout/fragment_register.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/fragment_rules.xml" value="0.28125" />
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.18333333333333332" />
         <entry key="app/src/main/res/layout/fragment_tags.xml" value="0.2953125" />
         <entry key="app/src/main/res/layout/fragment_trash.xml" value="0.2953125" />
+        <entry key="app/src/main/res/layout/note_preview_background.xml" value="0.2907692307692308" />
         <entry key="app/src/main/res/layout/pill_button.xml" value="0.4111373901367188" />
         <entry key="app/src/main/res/layout/preview_folder.xml" value="0.26944444444444443" />
-        <entry key="app/src/main/res/layout/preview_note.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/preview_note.xml" value="0.30547790527343754" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.159" />
       </map>
     </option>

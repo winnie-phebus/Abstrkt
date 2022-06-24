@@ -13,7 +13,7 @@
     gray1 for disabling buttons, gray2 for bounding boxes -->
 
     <color name="white">#FFFFFFFF</color>
-    <color name="black">#FF262626</color>
+    <color name="black">#333333</color>
     <color name="gray1">#BDBDBD</color>
     <color name="gray2">#F8F8F8</color>
 
@@ -22,5 +22,19 @@
 
     <color name="green_main">#36B268</color>
     <color name="green_light">#EBF7F0</color>
+    <color name="yellow_main">#EFCC17</color>
+    <color name="yellow_light">#FDFAE8</color>
+    <color name="orange_main">#E39621</color>
+    <color name="orange_light">#fcf5e9</color>
+    <color name="red_main">#EB5757</color>
+    <color name="red_light">#FDEEEE</color>
+    <color name="purple_main">#8A36B2</color>
+    <color name="purple_light">#F3EBF7</color>
+    <color name="blue_main">#1FB1EF</color>
+    <color name="blue_light">#E9F7FD</color>
+
+
+
+
 
 </resources>
