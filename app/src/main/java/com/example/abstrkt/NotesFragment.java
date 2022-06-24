@@ -195,20 +195,17 @@ public class NotesFragment extends Fragment {
                 // plusNote.setIcon(R.drawable.) TODO: add icons!
                 MenuItem plusFolder = in.add(Utils.PLUS_FOLDER);
 
+                MenuItem plusTag = in.add(Utils.PLUS_TAG);
+
                 addMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         if (menuItem.getTitle() == Utils.PLUS_NOTE){ // the add New Note case pressed
                             openNote(new Note(user.getDisplayName(), new ArrayList<String>()));
                         } else if (menuItem.getTitle() == Utils.PLUS_FOLDER){
-                            // Dialog newFolder = new AlertDialog(getContext());
-                            // View di = View.inflate(getContext(), R.layout.dialog_new_ft, );
-                            // PopupWindow newFolder = new PopupWindow(di);
-                            Utils.openAddDialog(getContext(), "", Utils.FSF_COLLECTION);
-
-                            // newFolder.set
-                            // newFolder.setTitle(Utils.PLUS_FOLDER);
-                            // Utils.newFolder(String title);
+                            Utils.openAddDialog(getContext(), Utils.FSF_COLLECTION);
+                        } else if (menuItem.getTitle().equals(Utils.PLUS_TAG)){
+                            Utils.openAddDialog(getContext(),Utils.FST_COLLECTION);
                         }
                         return true;
                     }

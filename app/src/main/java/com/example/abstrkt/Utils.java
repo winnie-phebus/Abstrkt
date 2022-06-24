@@ -56,7 +56,8 @@ public class Utils {
     public static final String N_TRASH = "TO DELETE";
     // the different menu strings for the addnew popup menu
     public static final String PLUS_NOTE = "+ Note";
-    public static final String PLUS_FOLDER = "New Folder";
+    public static final String PLUS_FOLDER = "+ Folder";
+    public static final String PLUS_TAG = "+ Tag";
 
     // UNIVERSAL / GENERALLY USEFUL METHODS:
 
@@ -213,7 +214,6 @@ public class Utils {
                 });
     }
 
-
     // VIEWS + CONTEXT EXT //
     // just a shorthand for making consistent toasts
     public static void toast(Context context, String message) {
@@ -221,8 +221,8 @@ public class Utils {
     }
 
     // opens the dialogs that take in input for naming a new collection item
-    public static void openAddDialog(Context context, String title, String collection){
-        buildInterp(context).openNewDialog(title, collection);
+    public static void openAddDialog(Context context, String collection){
+        buildInterp(context).openNewDialog(collection);
     }
 
     // NAVIGATION //
@@ -279,6 +279,6 @@ public class Utils {
         void openNoteActivity(Note note);
         void openTagFragment(String currentTag);
 
-        void openNewDialog(String title, String onClick);
+        void openNewDialog(String collection);
     }
 }

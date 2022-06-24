@@ -91,25 +91,31 @@ public class HomePage extends AppCompatActivity implements  NavigationView.OnNav
     }
 
     @Override
-    public void openNewDialog(String title, String collection){
-        AlertDialog.Builder newDialog = new AlertDialog.Builder(this);
+    public void openNewDialog(String collection){
+        AlertDialog newDialog = new AlertDialog.Builder(this).create();
         View v = getLayoutInflater().inflate(R.layout.dialog_new_ft, null);
         newDialog.setView(v);
 
-        newDialog.setTitle("CREATE NEW "+ collection.toUpperCase(Locale.ROOT));
-        //TextView titleTV = findViewById(R.id.dialog_title);
-        //titleTV.setText("CREATE NEW "+ collection.toUpperCase(Locale.ROOT));
+        newDialog.setTitle("ADD NEW TO "+ collection.toUpperCase(Locale.ROOT));
         newDialog.show();
 
         TextView input = v.findViewById(R.id.dialog_input);
 
-        Button submit = v.findViewById(R.id.dialog_submit);
-        submit.setOnClickListener(new View.OnClickListener() {
+        v.findViewById(R.id.dialog_submit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Utils.updateCollectionOnFB(user.getDisplayName(), collection, input.getText().toString());
+                newDialog.dismiss();
             }
         });
+
+        v.findViewById(R.id.dialog_cross).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                newDialog.dismiss();
+            }
+        });
+
     }
 
     @Override
