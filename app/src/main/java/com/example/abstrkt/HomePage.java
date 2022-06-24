@@ -19,7 +19,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class HomePage extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener, NotesFragment.ActivityInterp, Utils.ActivityInterp{
+public class HomePage extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener, Utils.ActivityInterp{
     public static final String TAG = "ABSTRACT_HOME";
     public static final String NOTE = "NOTE_EXTRA";
 
@@ -71,6 +71,18 @@ public class HomePage extends AppCompatActivity implements  NavigationView.OnNav
         Intent toNote = new Intent(this, NoteActivity.class);
         toNote.putExtra(NOTE, curr);
         startActivity(toNote);
+    }
+
+    @Override
+    public void openTagFragment(String currentTag) {
+        // TagsFragment specificTag = TagsFragment.newInstance();
+        //specificTag.showTagNotes(currentTag);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack("tag")
+                .replace(R.id.hp_frag_container, TagsFragment.newSpecificInstance(currentTag))
+                .commit();
     }
 
     @Override

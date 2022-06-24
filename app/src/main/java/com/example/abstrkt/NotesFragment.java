@@ -36,7 +36,6 @@ public class NotesFragment extends Fragment {
     private RecyclerView allFolders, folderNotes, allNotes;
     private FloatingActionButton addNew;
     private FirebaseUser user;
-    private ActivityInterp interp;
     private String ownerName;
     private TextView noteText;
     private FirestoreRecyclerAdapter<Note, NoteHolder> adapter;
@@ -61,7 +60,6 @@ public class NotesFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        interp = (ActivityInterp) context;
     }
 
     @Override
@@ -139,8 +137,6 @@ public class NotesFragment extends Fragment {
                         int pos = holder.getAbsoluteAdapterPosition();
                         holder.getFolderName().setText(model.getName());
                         holder.getLayout().setOnClickListener(new View.OnClickListener() {
-                            boolean isOpen = false;
-
                             @Override
                             public void onClick(View view) {
                                 checkStatus(holder, pos, model.getName());
@@ -193,7 +189,7 @@ public class NotesFragment extends Fragment {
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                                interp.openNoteActivity(curr);
+                                Utils.openNoteActivity(getContext(), curr);
                             }
                         });
             }

@@ -15,11 +15,6 @@ import android.view.ViewGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ArchiveFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ArchiveFragment extends Fragment {
 
 

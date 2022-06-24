@@ -42,19 +42,20 @@ public class Note implements Parcelable {
         this.title = "Untitled";
         this.noteAbstract = "This is where the note abstract goes.";
         this.body = "This is what the note body is.";
-        this.createdOn = Timestamp.from(ZonedDateTime.now().toInstant());
-        this.updatedOn = Timestamp.from(ZonedDateTime.now().toInstant());
+        this.createdOn = Utils.exactTime();
+        this.updatedOn = Utils.exactTime();
         this.tags = tags;
         this.status = Utils.N_BLANK;
     }
 
-    public Note(String title, String noteAbstract, String body, Timestamp createdOn, Timestamp updatedOn, List<String> tags) {
+    public Note(String title, String noteAbstract, String body, Date createdOn, Date updatedOn, List<String> tags) {
         this.title = title;
         this.noteAbstract = noteAbstract;
         this.body = body;
         this.createdOn = createdOn;
         this.updatedOn = updatedOn;
         this.tags = tags;
+        this.status = Utils.N_SAVED;
     }
 
     protected Note(Parcel in) {

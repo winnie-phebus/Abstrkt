@@ -1,6 +1,7 @@
 package com.example.abstrkt;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import java.sql.Timestamp;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class Utils {
     private static final String TAG = "ABSTRACT_UTILS";
@@ -39,6 +45,9 @@ public class Utils {
     public static final String FSF_COLLECTION = "folders";
     public static final String FSF_NAME = "name";
     public static final String FSF_OWNER = "owner";
+    // the field values for 'Tag' documens in Firebase, for ease and consistency
+    public static final String FST_COLLECTION = "tags";
+    public static final String FST_NAME = "title";
     // the different status states for a note
     public static final String N_BLANK = "BLANK";
     public static final String N_SAVED = "SAVED";
@@ -73,6 +82,11 @@ public class Utils {
         return buildStatusQuery(owner, N_SAVED).whereEqualTo(field, target);
     }
 
+    // builds a Query through the Notes collection looking for a value within an arr field
+    public static Query buildArrQuery(String owner, String arrField, String target){
+        return buildStatusQuery(owner, N_SAVED).whereArrayContains(arrField, target);
+    }
+
     // returns a NotesOptions object that handles the given query, which can be put into an adapter
     public static FirestoreRecyclerOptions<Note> newNotesOption(Context context, Query query) {
         FirestoreRecyclerOptions<Note> notes = new FirestoreRecyclerOptions.Builder<Note>()
@@ -83,35 +97,36 @@ public class Utils {
         return notes;
     }
 
-    // returns the adapter that is used almost universally
-    // (ex: referenced by NoteFragment, ArchiveFragment, and TrashFragment)
-    public static FirestoreRecyclerAdapter<Note, NoteHolder> buildNoteAdapter(Context context, Query query) {
-        ActivityInterp interp = (ActivityInterp) context;
-
+    public static FirestoreRecyclerAdapter<Note, NoteHolder> buildTagAdapter(TagsFragment frag, Context context, Query query){
         FirestoreRecyclerOptions<Note> notes = newNotesOption(context, query);
 
         return new FirestoreRecyclerAdapter<Note, NoteHolder>(notes) {
             @Override
             public void onBindViewHolder(NoteHolder holder, int position, Note model) {
+                model = makeTag(model);
+                Note finalModel = model;
+
                 holder.getTitle().setText(model.getTitle());
 
                 String summary = model.getAbstract();
-                if (model.getAbstract() == null) {
+                if (model.getAbstract() == null || TextUtils.isEmpty(model.getAbstract())) {
                     summary = model.getBody();
                 }
 
                 holder.getNoteSummary().setText(summary);
 
+                // the 'tags' of a tag are actually its rules :)
                 LinearLayoutManager llh = new LinearLayoutManager(context);
                 llh.setOrientation(RecyclerView.HORIZONTAL);
                 holder.getTags().setLayoutManager(llh);
                 holder.getTags().setAdapter(new NoteTagAdapter(model.getTags()));
 
+
                 holder.getContainer().setOnClickListener(
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                interp.openNoteActivity(model);
+                                frag.showTagNotes(finalModel.getTitle());
                             }
                         }
                 );
@@ -128,13 +143,57 @@ public class Utils {
                 return new NoteHolder(view);
             }
         };
+    }
 
+    // returns the adapter that is used almost universally
+    // (ex: referenced by NoteFragment, TagsFragment, ArchiveFragment, and TrashFragment)
+    public static FirestoreRecyclerAdapter<Note, NoteHolder> buildNoteAdapter(Context context, Query query) {
+        FirestoreRecyclerOptions<Note> notes = newNotesOption(context, query);
+
+        return new FirestoreRecyclerAdapter<Note, NoteHolder>(notes) {
+            @Override
+            public void onBindViewHolder(NoteHolder holder, int position, Note model) {
+                holder.getTitle().setText(model.getTitle());
+
+                String summary = model.getAbstract();
+                if (model.getAbstract() == null || TextUtils.isEmpty(model.getAbstract())) {
+                    summary = model.getBody();
+                }
+
+                holder.getNoteSummary().setText(summary);
+
+                LinearLayoutManager llh = new LinearLayoutManager(context);
+                llh.setOrientation(RecyclerView.HORIZONTAL);
+                holder.getTags().setLayoutManager(llh);
+                holder.getTags().setAdapter(new NoteTagAdapter(model.getTags()));
+
+                holder.getContainer().setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                openNoteActivity(context, model);
+                            }
+                        }
+                );
+            }
+
+            @NonNull
+            @Override
+            public NoteHolder onCreateViewHolder(ViewGroup group, int i) {
+                // Create a new instance of the ViewHolder, in this case we are using a custom
+                // layout called R.layout.message for each item
+                View view = LayoutInflater.from(group.getContext())
+                        .inflate(R.layout.preview_note, group, false);
+
+                return new NoteHolder(view);
+            }
+        };
     }
 
     // removes the note from Firestore
     // used to not save blank notes and in trash / rules
     public static void deleteNote(Context context, String id) {
-        FirebaseFirestore.getInstance().collection(FSN_COLLECTION).document(id)
+        FirebaseFirestore.getInstance().document(id)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -150,7 +209,6 @@ public class Utils {
                         toast(context, "Error deleting requested document: " + e.getMessage());
                     }
                 });
-
     }
 
     // just a shorthand for making consistent toasts
@@ -158,8 +216,36 @@ public class Utils {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
+    public static ActivityInterp buildInterp(Context context){
+        return (ActivityInterp) context;
+    }
+
+    public static void openTagFragment(Context context, String currentTag) {
+        buildInterp(context).openTagFragment(currentTag);
+    }
+
+    public static void openNoteActivity(Context context, Note curr) {
+        buildInterp(context).openNoteActivity(curr);
+    }
+
+    // returns the current time
+    public static Date exactTime() {
+        return Timestamp.from(ZonedDateTime.now().toInstant());
+    }
+
+    // formats a Note so that it essentially is a Tag, leaving no need for a dedicated Tag class
+    public static Note makeTag(Note note){
+        return new Note(note.getTitle(), null, null, Utils.exactTime(), Utils.exactTime(), note.getTags());
+    }
+
+    // makes a completely new Tag for the current user
+    public static Note newTag(String owner, String title){
+        return makeTag(new Note(owner, new ArrayList<String>()));
+    }
+
     // an interface that lets Util open the NoteActivity as needed
     interface ActivityInterp {
         void openNoteActivity(Note note);
+        void openTagFragment(String currentTag);
     }
 }
