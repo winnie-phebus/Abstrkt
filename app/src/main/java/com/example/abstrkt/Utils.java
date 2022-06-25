@@ -61,10 +61,18 @@ public class Utils {
     public static final String N_SAVED = "SAVED";
     public static final String N_ARCHIVED = "HIDDEN";
     public static final String N_TRASH = "TO DELETE";
+
     // the different menu strings for the addnew popup menu
     public static final String PLUS_NOTE = "+ Note";
     public static final String PLUS_FOLDER = "+ Folder";
     public static final String PLUS_TAG = "+ Tag";
+
+    // the commands for the menu buttons
+    public static final String COMM_TRASH = "DELETE";
+    public static final String COMM_ARCHIVE = "ARCHIVE";
+    public static final String COMM_ADDFOLDER = "ADD FOLDER";
+    public static final String COMM_ADDTAG = "ADD TAG";
+
     private static final String TAG = "ABSTRACT_UTILS";
 
     // UNIVERSAL / GENERALLY USEFUL METHODS:
@@ -248,6 +256,20 @@ public class Utils {
     // just a shorthand for making consistent toasts
     public static void toast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+    // changes the Folder the given note belongs to
+    public void addNoteToFolder(Note child, String name) {
+        child.setFolder(name);
+        updateNoteFB(child);
+    }
+
+    // uploads the changed note to FB
+    public static void updateNoteFB(Note note){
+        Log.d("NOTE ACTIVITY", note.getId());
+        FirebaseFirestore.getInstance()
+                .document(note.getId())
+                .set(note);
     }
 
     // opens the dialogs that take in input for naming a new collection item
