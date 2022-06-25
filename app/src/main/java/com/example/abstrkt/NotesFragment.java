@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,6 +48,7 @@ public class NotesFragment extends Fragment {
     private String ownerName;
     private TextView noteText;
     private FirestoreRecyclerAdapter<Note, NoteHolder> adapter;
+    private RecyclerView.ViewHolder currentItemViewHolder = null;
 
     // for Firebase class building
     public NotesFragment() {
@@ -77,7 +80,9 @@ public class NotesFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_notes, container, false);
         noteText = v.findViewById(R.id.textView_notes);
         allFolders = v.findViewById(R.id.recyclerView_allFolders);
+
         allNotes = v.findViewById(R.id.recyclerView_allNotes);
+
         addNew = v.findViewById(R.id.hp_new_note_fab);
 
         loadFolders();
@@ -246,16 +251,48 @@ public class NotesFragment extends Fragment {
 
         Query query = Utils.buildStatusQuery(ownerName, Utils.N_SAVED);
         updateAdapter(ownerName + "'s Notes", query);
+
+        SwipeController swipeController = new SwipeController(new SwipeControllerActions() {
+            @Override
+            public void onButtonClicked(int position, String command) {
+                // button press
+                Note note = adapter.getItem(position);
+
+                switch (command) {
+                    case Utils.COMM_TRASH:
+                        changeNoteStatus(note, Utils.N_TRASH);
+                        break;
+                    case Utils.COMM_ADDFOLDER:
+                        Log.d(TAG, "onButtonClicked: fold");
+                        Utils.openAddDialog(getContext(), Utils.FSF_COLLECTION);
+                        // addNoteToFolder(note, );
+                        break;
+                    case Utils.COMM_ARCHIVE:
+                        changeNoteStatus(note, Utils.N_ARCHIVED);
+                        break;
+                    case Utils.COMM_ADDTAG:
+                        Utils.openAddDialog(getContext(), Utils.FST_COLLECTION);
+                        break;
+                }
+            }
+        });
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+        itemTouchhelper.attachToRecyclerView(allNotes);
+        allNotes.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                swipeController.onDraw(c);
+            }
+        });
     }
 
-    // changes the Folder the given note belongs to
-    private void addNoteToFolder(Note child, Folder parent) {
-        child.setFolder(parent.getName());
-    }
+
 
     // update the given Note's status - TODO: might be unnecessary
     private void changeNoteStatus(Note note, String newStatus){
         note.setStatus(newStatus);
+        Utils.updateNoteFB(note);
     }
 
     // changes adds a new Tag for the given note
