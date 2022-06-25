@@ -60,12 +60,11 @@ public class MainActivity extends AppCompatActivity {
 
         appName = findViewById(R.id.lr_abstrakt_TV);
         pageMessage = findViewById(R.id.lr_screen_title_TV);
-        fragmentContainer = findViewById(R.id.lr_login_register_container);
+        // fragmentContainer = findViewById(R.id.lr_login_register_container);
 
         pageMessage.setText("Welcome Back!");
 
         checkAuth();
-        // TODO: use the FireBaseUI methods for delete / logOut
     }
 
     private void checkAuth() {
@@ -89,25 +88,9 @@ public class MainActivity extends AppCompatActivity {
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
                 .setIsSmartLockEnabled(false, true) // TODO: delete if adding Google Auth
-               // .setTheme(R.style.AppTheme)  TODO: if doing custom theme
+                // .setTheme(R.style.AppTheme)  TODO: if doing custom theme
                 .build().setFlags(FLAG_IMMUTABLE);
         signInLauncher.launch(signInIntent);
-    }
-
-    public void returnLogin() {
-        getSupportFragmentManager().beginTransaction()
-                .addToBackStack("Register")
-                .replace(R.id.lr_login_register_container, new LoginFragment())
-                .commit();
-        pageMessage.setText("Welcome Back!");
-    }
-
-    public void returnRegister() {
-        getSupportFragmentManager().beginTransaction()
-                .addToBackStack("Register")
-                .replace(R.id.lr_login_register_container, new RegisterFragment())
-                .commit();
-        pageMessage.setText("Register Here!");
     }
 
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
@@ -120,7 +103,9 @@ public class MainActivity extends AppCompatActivity {
             // Sign in failed. If response is null the user canceled the
             // sign-in flow using the back button. Otherwise check
             // response.getError().getErrorCode() and handle the error.
-            // ...
+            if (response != null) {
+                Utils.toast(this, response.getError().getMessage());
+            }
         }
     }
 }

@@ -32,7 +32,7 @@ public class TagsFragment extends Fragment {
         return new TagsFragment();
     }
 
-    public static TagsFragment newSpecificInstance(String tag){
+    public static TagsFragment newSpecificInstance(String tag) {
         TagsFragment showTag = new TagsFragment();
         Bundle args = new Bundle();
         args.putString("TAG", tag);
@@ -43,7 +43,7 @@ public class TagsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null){
+        if (getArguments() != null) {
             tag = getArguments().getString("TAG");
         }
     }
@@ -89,7 +89,7 @@ public class TagsFragment extends Fragment {
 
         tagNotes.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        if (tag != null){
+        if (tag != null) {
             showTagNotes(tag);
         } else {
             showAllUserTags();

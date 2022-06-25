@@ -1,6 +1,5 @@
 package com.example.abstrkt;
 
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 
@@ -48,12 +44,9 @@ public class NoteTagAdapter extends RecyclerView.Adapter<NoteTagAdapter.PillHold
     }
 
     private View.OnClickListener tagPressed(String currentTag) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "onClick: user clicked " + currentTag);
-                Utils.openTagFragment(view.getContext(), currentTag);
-            }
+        return view -> {
+            Log.d(TAG, "onClick: user clicked " + currentTag);
+            Utils.openTagFragment(view.getContext(), currentTag);
         };
     }
 

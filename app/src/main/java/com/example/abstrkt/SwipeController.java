@@ -23,15 +23,13 @@ enum ButtonsState {
 class SwipeController extends ItemTouchHelper.Callback {
 
     private static final float buttonWidth = 300;
-    private static final float buttonHeight = 165;
-
+    private final SwipeControllerActions buttonsActions;
     private boolean swipeBack = false;
     private ButtonsState buttonShowedState = ButtonsState.GONE;
     private RectF deleteButton = null;
     private RectF addFolderButton = null;
     private RectF addToArchiveButton = null;
     private RecyclerView.ViewHolder currentItemViewHolder = null;
-    private SwipeControllerActions buttonsActions = null;
     private RectF addTagButton = null;
 
     public SwipeController(SwipeControllerActions buttonsActions) {
@@ -39,17 +37,17 @@ class SwipeController extends ItemTouchHelper.Callback {
     }
 
     @Override
-    public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+    public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
         return makeMovementFlags(0, LEFT);
     }
 
     @Override
-    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
         return false;
     }
 
     @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
     }
 
@@ -63,7 +61,7 @@ class SwipeController extends ItemTouchHelper.Callback {
     }
 
     @Override
-    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+    public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
         if (actionState == ACTION_STATE_SWIPE) {
             if (buttonShowedState != ButtonsState.GONE) {
                 if (buttonShowedState == ButtonsState.RIGHT_VISIBLE)
@@ -81,60 +79,46 @@ class SwipeController extends ItemTouchHelper.Callback {
     }
 
     private void setTouchListener(final Canvas c, final RecyclerView recyclerView, final RecyclerView.ViewHolder viewHolder, final float dX, final float dY, final int actionState, final boolean isCurrentlyActive) {
-        recyclerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                swipeBack = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
-                if (swipeBack) {
-                    if (dX < -buttonWidth) buttonShowedState = ButtonsState.RIGHT_VISIBLE;
+        recyclerView.setOnTouchListener((v, event) -> {
+            swipeBack = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
+            if (swipeBack) {
+                if (dX < -buttonWidth) buttonShowedState = ButtonsState.RIGHT_VISIBLE;
 
-                    if (buttonShowedState != ButtonsState.GONE) {
-                        setTouchDownListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-                        setItemsClickable(recyclerView, false);
-                    }
+                if (buttonShowedState != ButtonsState.GONE) {
+                    setTouchDownListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                    setItemsClickable(recyclerView, false);
                 }
-                return false;
             }
+            return false;
         });
     }
 
     private void setTouchDownListener(final Canvas c, final RecyclerView recyclerView, final RecyclerView.ViewHolder viewHolder, final float dX, final float dY, final int actionState, final boolean isCurrentlyActive) {
-        recyclerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    setTouchUpListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-                }
-                return false;
+        recyclerView.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                setTouchUpListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
+            return false;
         });
     }
 
     private void setTouchUpListener(final Canvas c, final RecyclerView recyclerView, final RecyclerView.ViewHolder viewHolder, final float dX, final float dY, final int actionState, final boolean isCurrentlyActive) {
-        recyclerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    SwipeController.super.onChildDraw(c, recyclerView, viewHolder, 0F, dY, actionState, isCurrentlyActive);
-                    recyclerView.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                            return false;
-                        }
-                    });
-                    setItemsClickable(recyclerView, true);
-                    swipeBack = false;
+        recyclerView.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                SwipeController.super.onChildDraw(c, recyclerView, viewHolder, 0F, dY, actionState, isCurrentlyActive);
+                recyclerView.setOnTouchListener((v1, event1) -> false);
+                setItemsClickable(recyclerView, true);
+                swipeBack = false;
 
-                    if (buttonsActions != null && checkButtons(event)) {
-                        if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
-                            buttonsActions.onButtonClicked(viewHolder.getAbsoluteAdapterPosition(), findPress(event));
-                        }
+                if (buttonsActions != null && checkButtons(event)) {
+                    if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
+                        buttonsActions.onButtonClicked(viewHolder.getAbsoluteAdapterPosition(), findPress(event));
                     }
-                    buttonShowedState = ButtonsState.GONE;
-                    currentItemViewHolder = null;
                 }
-                return false;
+                buttonShowedState = ButtonsState.GONE;
+                currentItemViewHolder = null;
             }
+            return false;
         });
     }
 
@@ -192,44 +176,36 @@ class SwipeController extends ItemTouchHelper.Callback {
         c.drawRoundRect(leftButton, corners, corners, p);
         drawText("EDIT", c, leftButton, p);
 */
-        if (c != null) {
-            RectF delButton = new RectF(itemView.getRight() - buttonWidthWithoutPadding, itemView.getTop(), itemView.getRight(), itemView.getTop() + buttonHeightWithoutPadding);
-            p.setColor(Color.RED);
-            c.drawRoundRect(delButton, corners, corners, p);
-            drawText("DELETE", c, delButton, p);
+        RectF delButton = new RectF(itemView.getRight() - buttonWidthWithoutPadding, itemView.getTop(), itemView.getRight(), itemView.getTop() + buttonHeightWithoutPadding);
+        p.setColor(Color.RED);
+        c.drawRoundRect(delButton, corners, corners, p);
+        drawText("DELETE", c, delButton, p);
 
-            RectF archiveButton = new RectF(itemView.getRight() - buttonWidthWithoutPadding, itemView.getTop() + buttonHeight, itemView.getRight(), itemView.getTop() + (buttonHeight + buttonHeightWithoutPadding));
-            p.setColor(Color.RED);
-            c.drawRoundRect(archiveButton, corners, corners, p);
-            drawText("ARCHIVE", c, archiveButton, p);
+        RectF archiveButton = new RectF(itemView.getRight() - buttonWidthWithoutPadding, itemView.getTop() + buttonHeight, itemView.getRight(), itemView.getTop() + (buttonHeight + buttonHeightWithoutPadding));
+        p.setColor(Color.RED);
+        c.drawRoundRect(archiveButton, corners, corners, p);
+        drawText("ARCHIVE", c, archiveButton, p);
 
-            RectF tagButton = new RectF(itemView.getRight() - buttonWidthWithoutPadding,
-                    itemView.getTop() + (2 * buttonHeight), itemView.getRight(), itemView.getTop() + (2 * buttonHeight) + buttonHeightWithoutPadding);
-            p.setColor(Color.RED);
-            c.drawRoundRect(tagButton, corners, corners, p);
-            drawText("+ TAG", c, tagButton, p);
+        RectF tagButton = new RectF(itemView.getRight() - buttonWidthWithoutPadding,
+                itemView.getTop() + (2 * buttonHeight), itemView.getRight(), itemView.getTop() + (2 * buttonHeight) + buttonHeightWithoutPadding);
+        p.setColor(Color.RED);
+        c.drawRoundRect(tagButton, corners, corners, p);
+        drawText("+ TAG", c, tagButton, p);
 
-            RectF folderButton = new RectF(itemView.getRight() - buttonWidthWithoutPadding, itemView.getBottom() - buttonHeightWithoutPadding, itemView.getRight(), itemView.getBottom());
-            p.setColor(Color.RED);
-            c.drawRoundRect(folderButton, corners, corners, p);
-            drawText("+ FOLDER", c, folderButton, p);
+        RectF folderButton = new RectF(itemView.getRight() - buttonWidthWithoutPadding, itemView.getBottom() - buttonHeightWithoutPadding, itemView.getRight(), itemView.getBottom());
+        p.setColor(Color.RED);
+        c.drawRoundRect(folderButton, corners, corners, p);
+        drawText("+ FOLDER", c, folderButton, p);
 
 
-            // setButtonsNull();
+        // setButtonsNull();
 
-            if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
-                deleteButton = delButton;
-                addToArchiveButton = archiveButton;
-                addTagButton = tagButton;
-                addFolderButton = folderButton;
-            }
+        if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
+            deleteButton = delButton;
+            addToArchiveButton = archiveButton;
+            addTagButton = tagButton;
+            addFolderButton = folderButton;
         }
-    }
-
-    private void setButtonsNull() {
-        deleteButton = null;
-        addToArchiveButton = null;
-        addFolderButton = null;
     }
 
     private void drawText(String text, Canvas c, RectF button, Paint p) {

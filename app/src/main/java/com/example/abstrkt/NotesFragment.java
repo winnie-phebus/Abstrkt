@@ -1,9 +1,6 @@
 package com.example.abstrkt;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,11 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,16 +21,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -43,7 +34,6 @@ public class NotesFragment extends Fragment {
     public static final String TAG = "ABSTRACT_NOTES";
     protected int openFolder = -1;
     private RecyclerView allFolders, allNotes;
-    private FloatingActionButton addNew;
     private FirebaseUser user;
     private String ownerName;
     private TextView noteText;
@@ -56,8 +46,7 @@ public class NotesFragment extends Fragment {
     }
 
     public static NotesFragment newInstance() {
-        NotesFragment fragment = new NotesFragment();
-        return fragment;
+        return new NotesFragment();
     }
 
     @Override
@@ -83,7 +72,7 @@ public class NotesFragment extends Fragment {
 
         allNotes = v.findViewById(R.id.recyclerView_allNotes);
 
-        addNew = v.findViewById(R.id.hp_new_note_fab);
+        FloatingActionButton addNew = v.findViewById(R.id.hp_new_note_fab);
 
         loadFolders();
 
@@ -91,12 +80,9 @@ public class NotesFragment extends Fragment {
 
         FirebaseFirestore.getInstance()
                 .collection(Utils.FSN_COLLECTION)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        //loadNotes();
-                        adapter.notifyDataSetChanged();
-                    }
+                .addSnapshotListener((value, error) -> {
+                    //loadNotes();
+                    adapter.notifyDataSetChanged();
                 });
 
         addNew.setOnClickListener(addNewClicked());
@@ -122,16 +108,16 @@ public class NotesFragment extends Fragment {
                         }
                     }
 
-                    private boolean isOpenFolder(int pos){
+                    private boolean isOpenFolder(int pos) {
                         return openFolder == pos;
                     }
 
-                    private void checkStatus(@NonNull FolderHolder holder, int pos, String name){
+                    private void checkStatus(@NonNull FolderHolder holder, int pos, String name) {
                         if (isOpenFolder(pos)) { // folder is open and should close
                             Log.d(TAG, "onClick: folder should close.");
                             openFolder = -1;
                             loadNotes();
-                        }else { // for case openFolder is empty and someone else
+                        } else { // for case openFolder is empty and someone else
 /*                            if (openFolder != -1){
                                 this.getItemViewType(pos);
                                 forceDefer(holder, pos, name);
@@ -149,12 +135,9 @@ public class NotesFragment extends Fragment {
 
                         int pos = holder.getAbsoluteAdapterPosition();
                         holder.getFolderName().setText(model.getName());
-                        holder.getLayout().setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                checkStatus(holder, pos, model.getName());
-                                toggleIcon(holder, pos);
-                            }
+                        holder.getLayout().setOnClickListener(view -> {
+                            checkStatus(holder, pos, model.getName());
+                            toggleIcon(holder, pos);
                         });
                     }
 
@@ -187,38 +170,33 @@ public class NotesFragment extends Fragment {
                 .build();
     }
 
-    private View.OnClickListener addNewClicked(){
+    private View.OnClickListener addNewClicked() {
         // the add New Folder case pressed
 
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PopupMenu addMenu = new PopupMenu(getContext(), view, Gravity.RIGHT);
-                Menu in = addMenu.getMenu();
+        return view -> {
+            PopupMenu addMenu = new PopupMenu(getContext(), view, Gravity.END);
+            Menu in = addMenu.getMenu();
 
-                MenuItem plusNote = in.add(Utils.PLUS_NOTE);
-                // plusNote.setIcon(R.drawable.) TODO: add icons!
-                MenuItem plusFolder = in.add(Utils.PLUS_FOLDER);
+            MenuItem plusNote = in.add(Utils.PLUS_NOTE);
+            // plusNote.setIcon(R.drawable.) TODO: add icons!
+            MenuItem plusFolder = in.add(Utils.PLUS_FOLDER);
 
-                MenuItem plusTag = in.add(Utils.PLUS_TAG);
+            MenuItem plusTag = in.add(Utils.PLUS_TAG);
 
-                addMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        if (menuItem.getTitle() == Utils.PLUS_NOTE){ // the add New Note case pressed
-                            openNote(new Note(user.getDisplayName(), new ArrayList<String>()));
-                        } else if (menuItem.getTitle() == Utils.PLUS_FOLDER){
-                            Utils.openAddDialog(null, getContext(), Utils.FSF_COLLECTION);
-                        } else if (menuItem.getTitle().equals(Utils.PLUS_TAG)){
-                            Utils.openAddDialog(null, getContext(),Utils.FST_COLLECTION);
-                        }
-                        return true;
-                    }
-                });
-                addMenu.show();
-            }
+            addMenu.setOnMenuItemClickListener(menuItem -> {
+                if (menuItem.getTitle() == Utils.PLUS_NOTE) { // the add New Note case pressed
+                    openNote(new Note(user.getDisplayName(), new ArrayList<>()));
+                } else if (menuItem.getTitle() == Utils.PLUS_FOLDER) {
+                    Utils.openAddDialog(null, getContext(), Utils.FSF_COLLECTION);
+                } else if (menuItem.getTitle().equals(Utils.PLUS_TAG)) {
+                    Utils.openAddDialog(null, getContext(), Utils.FST_COLLECTION);
+                }
+                return true;
+            });
+            addMenu.show();
         };
     }
+
     // opens a new Note to the viewer and also adds a new document to Firebase
     private void openNote(Note curr) {
         DocumentReference ref = FirebaseFirestore.getInstance()
@@ -228,12 +206,7 @@ public class NotesFragment extends Fragment {
         curr.setId(ref.getPath());
 
         ref.set(curr)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Utils.openNoteActivity(getContext(), curr);
-                    }
-                });
+                .addOnSuccessListener(unused -> Utils.openNoteActivity(getContext(), curr));
     }
 
     // builds the adapter with the given query
@@ -281,23 +254,17 @@ public class NotesFragment extends Fragment {
         itemTouchhelper.attachToRecyclerView(allNotes);
         allNotes.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
-            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+            public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 swipeController.onDraw(c);
             }
         });
     }
 
 
-
     // update the given Note's status - TODO: might be unnecessary
-    private void changeNoteStatus(Note note, String newStatus){
+    private void changeNoteStatus(Note note, String newStatus) {
         note.setStatus(newStatus);
         Utils.updateNoteFB(note);
-    }
-
-    // changes adds a new Tag for the given note
-    private void addNewTagToNote(Note subject, String newTag) {
-        subject.getTags().add(newTag);
     }
 
 

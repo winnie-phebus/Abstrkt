@@ -1,17 +1,12 @@
 package com.example.abstrkt;
 
-import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 public class FolderHolder extends RecyclerView.ViewHolder {
 
@@ -49,27 +44,6 @@ public class FolderHolder extends RecyclerView.ViewHolder {
 
     public void setLayout(ConstraintLayout layout) {
         this.layout = layout;
-    }
-
-    // might be referencing later
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView =  inflater.inflate(R.layout.preview_folder, container, false);
-
-        folderIcon = rootView.findViewById(R.id.folder_prev_icon);
-        folderName = rootView.findViewById(R.id.folder_prev_name);
-
-        layout = rootView.findViewById(R.id.folder_outsideContainer);
-
-        layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        return rootView;
     }
 
 

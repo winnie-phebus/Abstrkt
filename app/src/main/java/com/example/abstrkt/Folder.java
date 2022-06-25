@@ -1,18 +1,15 @@
 package com.example.abstrkt;
 
-import com.google.firebase.firestore.DocumentReference;
-
-import java.util.ArrayList;
-import java.util.List;
-
+// An object representation of the simple Folder class
 public class Folder {
     String name;
     String owner;
 
+    // may get used
     public Folder() {
     }
 
-    // for creating Folders, will be used in +Folder
+    // for creating Folders, might be used in +Folder
     public Folder(String name, String owner) {
         this.name = name;
         this.owner = owner;

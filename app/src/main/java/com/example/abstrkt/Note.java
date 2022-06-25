@@ -34,9 +34,11 @@ public class Note implements Parcelable {
     private Date createdOn;
     private Date updatedOn;
     private List<String> tags;
+
     // for Firebase
     public Note() {
     }
+
     public Note(String owner, List<String> tags) {
         this.owner = owner;
         this.title = "Untitled";

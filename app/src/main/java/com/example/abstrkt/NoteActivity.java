@@ -3,28 +3,20 @@ package com.example.abstrkt;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Date;
 import java.util.List;
 
 public class NoteActivity extends AppCompatActivity {
 
     private EditText title, noteAbstract, noteBody;
-    private TextView lastUpdated, createdOn;
-    private ImageButton close;
-    private RecyclerView editTags;
 
     private List<String> tags;
     private Note note;
@@ -52,11 +44,11 @@ public class NoteActivity extends AppCompatActivity {
         title = findViewById(R.id.editText_title);
         noteAbstract = findViewById(R.id.editText_abstract);
         noteBody = findViewById(R.id.editText_note);
-        editTags = findViewById(R.id.note_editTags);
+        RecyclerView editTags = findViewById(R.id.note_editTags);
 
-        createdOn = findViewById(R.id.textView_createdOn);
-        lastUpdated = findViewById(R.id.textView_updatedOn);
-        close = findViewById(R.id.imageButton_closeNote);
+        TextView createdOn = findViewById(R.id.textView_createdOn);
+        TextView lastUpdated = findViewById(R.id.textView_updatedOn);
+        ImageButton close = findViewById(R.id.imageButton_closeNote);
 
         title.setText(note.getTitle());
         noteAbstract.setText(note.getAbstract());
@@ -64,22 +56,11 @@ public class NoteActivity extends AppCompatActivity {
         lastUpdated.setText(Utils.formatDate(note.getUpdatedOn()));
         noteBody.setText(note.getBody());
 
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateNoteFB();
-                Intent toHome = new Intent(NoteActivity.this, HomePage.class);
-                startActivity(toHome);
-            }
+        close.setOnClickListener(v -> {
+            updateNoteFB();
+            Intent toHome = new Intent(NoteActivity.this, HomePage.class);
+            startActivity(toHome);
         });
-    }
-
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<String> tags) {
-        this.tags = tags;
     }
 
     // checks what part of the note has been updated by user, deletes basic notes
@@ -108,7 +89,7 @@ public class NoteActivity extends AppCompatActivity {
             note.setBody(noteBody.getText().toString());
         }
 
-        if (isChanged(note.getStatus(), Utils.N_SAVED)){
+        if (isChanged(note.getStatus(), Utils.N_SAVED)) {
             note.setStatus(Utils.N_SAVED);
         }
 
@@ -128,12 +109,9 @@ public class NoteActivity extends AppCompatActivity {
         FirebaseFirestore.getInstance()
                 .document(note.getId())
                 .set(note)
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(NoteActivity.this, "saving note failed!", Toast.LENGTH_SHORT);
-                        // TODO: make a Note backup system so that a revert local note system can be enacted in this case
-                    }
+                .addOnFailureListener(e -> {
+                    Utils.toast(NoteActivity.this, "saving note failed!");
+                    // TODO: make a Note backup system so that a revert local note system can be enacted in this case
                 });
     }
 }

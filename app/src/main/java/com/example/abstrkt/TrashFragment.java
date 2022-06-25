@@ -22,16 +22,13 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class TrashFragment extends Fragment {
     private FirebaseUser user;
-    private Button clearTrash;
-    private RecyclerView trashNotes;
 
     public TrashFragment() {
         // Required empty public constructor
     }
 
     public static TrashFragment newInstance() {
-        TrashFragment fragment = new TrashFragment();
-        return fragment;
+        return new TrashFragment();
     }
 
     @Override
@@ -51,9 +48,9 @@ public class TrashFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_trash, container, false);
 
-        clearTrash = v.findViewById(R.id.trash_clear);
+        Button clearTrash = v.findViewById(R.id.trash_clear);
         clearTrash.setOnClickListener(deleteAllTrash());
-        trashNotes = v.findViewById(R.id.arc_rv);
+        RecyclerView trashNotes = v.findViewById(R.id.arc_rv);
 
         trashNotes.setLayoutManager(new LinearLayoutManager(getContext()));
         trashNotes.setAdapter(
@@ -63,12 +60,9 @@ public class TrashFragment extends Fragment {
     }
 
     private View.OnClickListener deleteAllTrash() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utils.toast(getContext(), "Working on it! :P");
-                // TODO: implement this! :) -- figure out how to traverse the query list and delete
-            }
+        return view -> {
+            Utils.toast(getContext(), "Working on it! :P");
+            // TODO: implement this! :) -- figure out how to traverse the query list and delete
         };
     }
 }
