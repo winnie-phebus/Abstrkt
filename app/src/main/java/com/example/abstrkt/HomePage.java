@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -91,7 +90,7 @@ public class HomePage extends AppCompatActivity implements  NavigationView.OnNav
     }
 
     @Override
-    public void openNewDialog(String collection){
+    public void openNewDialog(Note note, String collection){
         AlertDialog newDialog = new AlertDialog.Builder(this).create();
         View v = getLayoutInflater().inflate(R.layout.dialog_new_ft, null);
         newDialog.setView(v);
@@ -104,7 +103,7 @@ public class HomePage extends AppCompatActivity implements  NavigationView.OnNav
         v.findViewById(R.id.dialog_submit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Utils.updateCollectionOnFB(user.getDisplayName(), collection, input.getText().toString());
+                Utils.updateCollectionOnFB(note, user.getDisplayName(), collection, input.getText().toString());
                 newDialog.dismiss();
             }
         });

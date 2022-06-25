@@ -208,9 +208,9 @@ public class NotesFragment extends Fragment {
                         if (menuItem.getTitle() == Utils.PLUS_NOTE){ // the add New Note case pressed
                             openNote(new Note(user.getDisplayName(), new ArrayList<String>()));
                         } else if (menuItem.getTitle() == Utils.PLUS_FOLDER){
-                            Utils.openAddDialog(getContext(), Utils.FSF_COLLECTION);
+                            Utils.openAddDialog(null, getContext(), Utils.FSF_COLLECTION);
                         } else if (menuItem.getTitle().equals(Utils.PLUS_TAG)){
-                            Utils.openAddDialog(getContext(),Utils.FST_COLLECTION);
+                            Utils.openAddDialog(null, getContext(),Utils.FST_COLLECTION);
                         }
                         return true;
                     }
@@ -264,14 +264,14 @@ public class NotesFragment extends Fragment {
                         break;
                     case Utils.COMM_ADDFOLDER:
                         Log.d(TAG, "onButtonClicked: fold");
-                        Utils.openAddDialog(getContext(), Utils.FSF_COLLECTION);
+                        Utils.openAddDialog(note, getContext(), Utils.FSF_COLLECTION);
                         // addNoteToFolder(note, );
                         break;
                     case Utils.COMM_ARCHIVE:
                         changeNoteStatus(note, Utils.N_ARCHIVED);
                         break;
                     case Utils.COMM_ADDTAG:
-                        Utils.openAddDialog(getContext(), Utils.FST_COLLECTION);
+                        Utils.openAddDialog(note, getContext(), Utils.FST_COLLECTION);
                         break;
                 }
             }

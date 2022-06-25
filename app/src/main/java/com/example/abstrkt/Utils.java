@@ -1,7 +1,6 @@
 package com.example.abstrkt;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,12 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -259,8 +255,16 @@ public class Utils {
     }
 
     // changes the Folder the given note belongs to
-    public void addNoteToFolder(Note child, String name) {
+    public static void addNoteToFolder(Note child, String name) {
         child.setFolder(name);
+        //updateCollectionOnFB(child.getOwner(), FSF_COLLECTION, name);
+        updateNoteFB(child);
+    }
+
+    // changes the Tag that the child is being added to
+    public static void addTagToNote(Note child, String title){
+        child.addTag(title);
+        //updateCollectionOnFB(child.getOwner(), FST_COLLECTION, title);
         updateNoteFB(child);
     }
 
@@ -273,8 +277,8 @@ public class Utils {
     }
 
     // opens the dialogs that take in input for naming a new collection item
-    public static void openAddDialog(Context context, String collection) {
-        buildInterp(context).openNewDialog(collection);
+    public static void openAddDialog(Note note, Context context, String collection) {
+        buildInterp(context).openNewDialog(note, collection);
     }
 
     // NAVIGATION //
@@ -314,15 +318,17 @@ public class Utils {
         item.put(FSF_OWNER, ownerName);
         item.put(field, toString);
 
-        FirebaseFirestore.getInstance().collection(collection).add(item);
+        FirebaseFirestore.getInstance().collection(collection).document().set(item);
     }
 
     // adds a new String item to a collection on Firestore based on collection type
-    public static void updateCollectionOnFB(String ownerName, String collection, String toString) {
+    public static void updateCollectionOnFB(Note note, String ownerName, String collection, String toString) {
         if (collection.equals(FSF_COLLECTION)) {
             addCollectionItemToFB(ownerName, collection, FSF_NAME, toString);
+            if (note != null) {addNoteToFolder(note, toString);}
         } else if (collection.equals(FST_COLLECTION)) {
             addCollectionItemToFB(ownerName, collection, FSN_TITLE, toString);
+            if (note != null) {addTagToNote(note, toString);}
         }
     }
 
@@ -338,6 +344,6 @@ public class Utils {
 
         void openTagFragment(String currentTag);
 
-        void openNewDialog(String collection);
+        void openNewDialog(Note note, String collection);
     }
 }
