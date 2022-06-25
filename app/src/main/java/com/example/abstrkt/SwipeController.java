@@ -176,13 +176,14 @@ class SwipeController extends ItemTouchHelper.Callback {
     }
 
     private void drawButtons(@NonNull Canvas c, RecyclerView.ViewHolder viewHolder) {
-        float padding = 25;
+        float padding = 15;
+        View itemView = viewHolder.itemView;
         float buttonWidthWithoutPadding = buttonWidth - padding;
+        float buttonHeight = (itemView.getHeight() / 4) + 5;
         float buttonHeightWithoutPadding = buttonHeight - padding;
 
         float corners = 16;
 
-        View itemView = viewHolder.itemView;
         Paint p = new Paint();
 
 /*
